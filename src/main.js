@@ -6,32 +6,10 @@ export default function (context) {
   const document = context.document;
   const pages = document.pages();
 
-  for (var i = 0; i < pages.count(); i++) {
-    const page = pages[i];
+  const pageEnumerator = pages.objectEnumerator();
+  while (page = pageEnumerator.nextObject()) {
     console.log(`Page: ${page.name()}`);
     processArtboards(page.artboards());
-  }
-
-  // const sketch = context.api();
-  // const doc = sketch.selectedDocument;
-
-  var selectedLayers = context.selection;
-  var selectedCount = selectedLayers.count();
-
-  for (var i = 0; i < selectedLayers.count(); i++) {
-    const layer = selectedLayers[i];
-    const name = layer.name();
-    const style = layer.style();
-    const frame = layer.frame();
-
-    // const layerFrame = this.getLayerFrame(layer);
-    // console.log(layerFrame.width);
-
-    const frameLayer = getLayerFrame(layer);
-    console.log(frameLayer);
-
-    const color = getLayerColor(layer);
-    console.log(color);
   }
 }
 
@@ -40,27 +18,64 @@ function processArtboards(artboards) {
   while (artboard = artboardEnumerator.nextObject()) {
     const artboardName = artboard.name().trim();
     console.log(`Artboard: ${artboardName}`);
-
     processArtboardLayers(artboard.layers());
   }
 }
 
-// MSLayerGroup
-// MSTextLayer
-// Shape
+/*
+  This process layers in an artboard
+  A layer can be MSLayerGroup, MSTextLayer, MSShapeGroup, MSBitmapLayer, etc.
 
-// "<MSLayerGroup: 0x6080001d6530> Banner:React (CA2A2B41-877B-4D67-9BF4-17EF57B98635)",
-// "<MSTextLayer: 0x7fa0d1cd7e50> Standalone text (E6280CC4-9019-4B64-97D8-389343963FC8)",
-// "<MSShapeGroup: 0x6180003e9400> Path 2 (7C5E5053-4D03-468D-8E76-15B9BDC237D8)",
-// "<MSBitmapLayer: 0x7fa0d1cdcfd0> Screen Shot 2017-04-13 at 7.31.56 AM (73AA47C3-95F6-4212-A0B7-F616CEBAE39D)",
-// "<MSShapeGroup: 0x6000005e6c00> Oval (158FC073-33D5-45EF-AF69-0672EAED4C8F)"
-
-// A layer can be MSLayerGroup, MSTextLayer, MSShapeGroup, MSBitmapLayer, etc.
+  MSLayerGroup is a collection of other objects. MSLayerGroup can have children of MSLayerGroup.
+*/
 function processArtboardLayers(layers) {
-  for (var i = 0; i < layers.count(); i++) {
-    const layer = layers[i];
-    console.log(layer.name());
+  const layerEnumerator = layers.objectEnumerator();
+  while (layer = layerEnumerator.nextObject()) {
+    console.log(`Layer: ${layer.name()} ${layer}`);
+    if (layer.isKindOfClass(MSShapeGroup)) { // this can be a path, oval or rectangle, etc
+      // TODO: This can be a path, oval, rectangle, etc
+      console.log("Shapes are not yet supported");
+    } else if (layer.isKindOfClass(MSLayerGroup)) {
+      processLayerGroup(layer);
+    } else if (layer.isKindOfClass(MSTextLayer)) {
+      processTextLayer(layer);
+    } else if (layer.isKindOfClass(MSBitmapLayer)) {
+      processBitmapLayer(layer);
+    }
   }
+}
+
+function processLayerGroup(layerGroup) {
+  console.log("This is a MSLayerGroup...");
+  const layers = layerGroup.layers();
+
+  const name = layerGroup.name();
+  const rect = layerGroup.rect();
+
+  const layerEnumerator = layers.objectEnumerator();
+  while (layer = layerEnumerator.nextObject()) {
+    if (layer.isKindOfClass(MSShapeGroup)) {
+      processShapeLayer(layer);
+    } else if (layer.isKindOfClass(MSLayerGroup)) {
+      processLayerGroup(layer);
+    } else if (layer.isKindOfClass(MSTextLayer)) {
+      processTextLayer(layer);
+    } else if (layer.isKindOfClass(MSBitmapLayer)) {
+      processBitmapLayer(layer);
+    }
+  }
+}
+
+function processShapeLayer(shapeLayer) {
+  console.log("This is a shape layer");
+}
+
+function processTextLayer(textLayer) {
+  console.log("This is a MSTextLayer");
+}
+
+function processBitmapLayer(bitmapLayer) {
+  console.log("This is a MSBitmapLayer");
 }
 
 function getLayerFrame(layer) {
@@ -77,3 +92,21 @@ function getLayerColor(layer) {
 
   return [red, green, blue, alpha];
 }
+
+/*
+var selectedLayers = context.selection;
+var selectedCount = selectedLayers.count();
+
+for (var i = 0; i < selectedLayers.count(); i++) {
+  const layer = selectedLayers[i];
+  const name = layer.name();
+  const style = layer.style();
+  const frame = layer.frame();
+
+  const frameLayer = getLayerFrame(layer);
+  console.log(frameLayer);
+
+  const color = getLayerColor(layer);
+  console.log(color);
+}
+*/
