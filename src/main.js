@@ -89,6 +89,28 @@ function processShapeLayer(shapeLayer) {
 
 function processTextLayer(textLayer) {
   console.log("This is a MSTextLayer");
+  const frame = textLayer.rect();
+  const name = textLayer.name();
+  const attributedString = textLayer.attributedString().attributedString();
+
+  const length = attributedString.length();
+  const range = NSMakeRange(0, length);
+  const fontAttributes = attributedString.fontAttributesInRange(range);
+
+  const color = fontAttributes['NSColor'];
+  const font = fontAttributes['NSFont'];
+
+  console.log(color);
+  console.log(font);
+
+  // Frame
+  // Transform
+  // Typeface: Helvetica
+  // Weight : Regular | Oblique | Lite | Lite Oblique | Bold | Bold Oblique
+  // Color
+  // Size
+  // Alignment: Left | Center | Right | Full Adjusted
+  // Opacity
 }
 
 function processBitmapLayer(bitmapLayer) {
