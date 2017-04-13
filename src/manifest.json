@@ -1,0 +1,18 @@
+{
+	"compatibleVersion": 3,
+	"bundleVersion": 1,
+	"commands": [
+		{
+			"name": "Generate Component",
+			"identifier": "generate-component",
+			"shortcut": "ctrl shift s",
+			"script": "./main.js"
+		}
+	],
+	"menu": {
+		"title": "Scribe",
+		"items": [
+			"generate-component"
+		]
+	}
+}

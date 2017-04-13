@@ -1,0 +1,23 @@
+{
+	"name": "scribe",
+	"version": "1.0.0",
+	"description": "A Sketch extension that generates React code from a Sketch design",
+	"main": "plugin.sketchplugin",
+	"scripts": {
+		"test": "test",
+		"build": "skpm build",
+		"publish": "skpm publish"
+	},
+	"keywords": [
+		"sketch",
+		"react",
+		"design",
+		"component"
+	],
+	"author": "David Le",
+	"license": "MIT",
+	"manifest": "src/manifest.json",
+	"devDependencies": {
+		"skpm": "^0.7.4"
+	}
+}
