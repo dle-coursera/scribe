@@ -5,7 +5,7 @@ A tool to generate code from Sketch designs
 1. npm install -g skpm
 2. skpm build --watch
 
-For more, read [Using skpm]:https://www.npmjs.com/package/skpm
+For more, read [Using skpm](https://www.npmjs.com/package/skpm)
 
 ## How to use
 1. Open the system console by going to `Applications -> Utilities -> Console`
@@ -14,6 +14,6 @@ For more, read [Using skpm]:https://www.npmjs.com/package/skpm
 4. Observe the logs
 
 ## Development
-During development, you'll want to communicate with Sketch APIs. Since Sketch is an Objective-c app, we can retrieve header files for all of their classes. Use this as reference to find the APIs that you need. [Sketch class-dump]:https://github.com/dle-coursera/sketch-class-dump.
+During development, you'll want to communicate with Sketch APIs. Since Sketch is an Objective-c app, we can retrieve header files for all of their classes. Use this as reference to find the APIs that you need. [Sketch class-dump](https://github.com/dle-coursera/sketch-class-dump).
 
 Any class that as a `MS` prefix is a Sketch object ex. `MSArtboard`. Any object that's prefixed as `NS` and `CG` are Apple objects. Ex. `NSDocument` and `CGRect`. Google Apple classes to find relevant documentation for them.
