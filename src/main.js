@@ -1,4 +1,7 @@
-import Frame from './Frame'
+import Frame from './models/Frame';
+import CSSModel from './css-support/CSSModel';
+import {getOutputDirectoryPath} from './fileSupport';
+import {pTag} from './html-support/htmlSupport';
 
 export default function (context) {
   context.document.showMessage('It\'s alive 333 🙌')
@@ -89,19 +92,27 @@ function processShapeLayer(shapeLayer) {
 
 function processTextLayer(textLayer) {
   console.log("This is a MSTextLayer");
-  const frame = textLayer.rect();
-  const name = textLayer.name();
   const attributedString = textLayer.attributedString().attributedString();
 
   const length = attributedString.length();
   const range = NSMakeRange(0, length);
   const fontAttributes = attributedString.fontAttributesInRange(range);
 
+  const string = attributedString.string();
+  const frame = textLayer.rect();
+  const name = textLayer.name();
   const color = fontAttributes['NSColor'];
   const font = fontAttributes['NSFont'];
 
   console.log(color);
   console.log(font);
+
+  const folderPath = getOutputDirectoryPath('My Folder');
+  console.log(folderPath);
+
+  console.log(string);
+  const tag = pTag('myClass class2', string);
+  console.log(tag);
 
   // Frame
   // Transform

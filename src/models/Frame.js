@@ -1,4 +1,4 @@
-class Frame {
+export default class Frame {
   constructor(x, y, width, height) {
     this.x = x;
     this.y = y;
@@ -6,5 +6,3 @@ class Frame {
     this.height = height;
   }
 }
-
-module.exports = Frame;
