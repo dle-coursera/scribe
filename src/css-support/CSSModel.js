@@ -8,25 +8,27 @@ export default class CSSModel {
     this.properties = properties;
   }
 
-  getTemplate(selector, properties) {
-    // The output should be like this
-    /*
-    .selector1, .selector2 {
-      prop1: value1;
-      prop2: value2;
-      prop3: value3:
+  getTemplate(selectors, properties) {
+    const annotatedSelectors = selectors
+      .map(selector => '.' + selector)
+      .reduce((first, second) => first + ', ' + second);
+
+    let combinedProperties = [];
+    for (var key in properties) {
+      const value = properties[key];
+      combinedProperties.push(`${key}: ${value};`);
     }
-    */
-    console.log(properties);
+
+    const propertyString = combinedProperties.reduce((first, second) => first + second);
+
     return `
-    ${selector} {
-      ${properties}
+    ${annotatedSelectors} {
+      ${propertyString}
     }
     `;
   }
 
-  generateCSS() {
-    // return template(this.selectors, this.properties)
-    console.log("---Generating");
+  generate() {
+    return this.getTemplate(this.selectors, this.properties)
   }
 }

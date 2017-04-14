@@ -19,10 +19,35 @@ export const visualFormatting = {
   visibility: 'visibility',
 }
 
-export boxModel = {
+export const boxModel = {
   margin: 'margin',
   marginTop: 'margin-top',
   marginBottom: 'margin-bottom',
   marginLeft: 'margin-left',
   marginRight: 'margin-right',
+}
+
+export const colorsAndBackground = {
+  color: 'color',
+  opacity: 'opacity',
+  backgroundColor: 'background-color',
+  background: 'background-image',
+  backgroundRepeat: 'background-repeat',
+  backgroundPosition: 'background-position',
+  backgroundAttachment: 'background-attachment',
+  backgroundClip: 'background-clip',
+  backgroundOrigin: 'background-origin',
+  backgroundSize: 'background-size',
+  borderRadius: 'border-radius',
+  borderTopLeftRadius: 'border-top-left-radius',
+  borderTopRightRadius: 'border-top-right-radius',
+  borderBottomRightRadius: 'border-bottom-right-radius',
+  borderBottomLeftRadius: 'border-bottom-left-radius',
+  borderImage: 'border-image',
+  borderImageSource: 'border-image-source',
+  borderImageSlice: 'border-image-slice',
+  borderImageWidth: 'border-image-width',
+  borderImageOutset: 'border-image-outset',
+  borderImageRepeat: 'border-image-repeat',
+  boxShadow: 'box-shadow',
 }

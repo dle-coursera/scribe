@@ -2,6 +2,8 @@ import Frame from './models/Frame';
 import CSSModel from './css-support/CSSModel';
 import {getOutputDirectoryPath} from './fileSupport';
 import {pTag} from './html-support/htmlSupport';
+import {colorsAndBackground} from './css-support/cssProperties';
+import {hexColorForNSColor, opacityForNSColor} from './layer-support/color';
 
 export default function (context) {
   context.document.showMessage('It\'s alive 333 🙌')
@@ -101,17 +103,23 @@ function processTextLayer(textLayer) {
   const string = attributedString.string();
   const frame = textLayer.rect();
   const name = textLayer.name();
-  const color = fontAttributes['NSColor'];
+  const colorValue = fontAttributes['NSColor'];
   const font = fontAttributes['NSFont'];
-
-  console.log(color);
-  console.log(font);
 
   const folderPath = getOutputDirectoryPath('My Folder');
   console.log(folderPath);
+  const tag = pTag(name, string);
 
-  console.log(string);
-  const tag = pTag('myClass class2', string);
+  let hexColor = hexColorForNSColor(colorValue);
+  let opacityValue = opacityForNSColor(colorValue);
+
+  const cssProperties = {
+    color: hexColor,
+    opacity: opacityValue,
+  }
+
+  const css = new CSSModel([name, 'another-class'], cssProperties)
+  console.log(css.generate());
   console.log(tag);
 
   // Frame
