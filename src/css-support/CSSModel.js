@@ -8,7 +8,7 @@ export default class CSSModel {
     this.properties = properties;
   }
 
-  function template(selector, properties) {
+  getTemplate(selector, properties) {
     // The output should be like this
     /*
     .selector1, .selector2 {
@@ -25,7 +25,7 @@ export default class CSSModel {
     `;
   }
 
-  function generateCSS() {
+  generateCSS() {
     // return template(this.selectors, this.properties)
     console.log("---Generating");
   }
