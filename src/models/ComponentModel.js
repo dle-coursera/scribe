@@ -1,7 +1,15 @@
 export default class ComponentModel {
-     constructor(htmlTag, cssModel) {
-       self.htmlTag = htmlTag;
+     constructor(html, cssModel) {
+       self.html = html;
        self.cssModel = cssModel;
+     }
+
+     get html() {
+       return self.html;
+     }
+
+     get cssModel() {
+       return self.cssModel;
      }
 
      updateCssWithPadding(topPadding = 0, rightPadding = 0, bottomPadding = 0, leftPadding = 0) {
