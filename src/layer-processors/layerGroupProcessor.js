@@ -14,7 +14,8 @@ export const processLayerGroup = (layerGroup) => {
     } else if (layer.isKindOfClass(MSLayerGroup)) {
       processLayerGroup(layer);
     } else if (layer.isKindOfClass(MSTextLayer)) {
-      processTextLayer(layer);
+      const component = processTextLayer(layer);
+      console.log(component.html);
     } else if (layer.isKindOfClass(MSBitmapLayer)) {
       processBitmapLayer(layer);
     }

@@ -1,8 +1,8 @@
 import CSSModel from '../css-support/CSSModel';
-import {getOutputDirectoryPath} from '../fileSupport';
 import {pTag} from '../html-support/htmlSupport';
 import {colorsAndBackground} from '../css-support/cssProperties';
 import {hexColorForNSColor, opacityForNSColor} from '../layer-support/color';
+import ComponentModel from '../models/ComponentModel'
 
 export const processTextLayer = (textLayer) => {
   console.log("This is a MSTextLayer");
@@ -18,8 +18,6 @@ export const processTextLayer = (textLayer) => {
   const colorValue = fontAttributes['NSColor'];
   const font = fontAttributes['NSFont'];
 
-  const folderPath = getOutputDirectoryPath('My Folder');
-  console.log(folderPath);
   const tag = pTag(name, string);
 
   let hexColor = hexColorForNSColor(colorValue);
@@ -33,17 +31,13 @@ export const processTextLayer = (textLayer) => {
   }
 
   const css = new CSSModel([name, 'another-class'], cssProperties)
-  console.log(css.generate());
-  console.log(tag);
+  return new ComponentModel(tag, css);
 
   // Frame
-  // Transform
   // Typeface: Helvetica
   // Weight : Regular | Oblique | Lite | Lite Oblique | Bold | Bold Oblique
-  // Color
   // Size
   // Alignment: Left | Center | Right | Full Adjusted
-  // Opacity
 }
 
 export const processBitmapLayer = (bitmapLayer) => {
