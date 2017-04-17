@@ -89,7 +89,7 @@ export default class CSSModel {
     if (right && right != 0) {
       this.properties[paddingRight] = right;
     } else {
-      delete this.properties[paddigRight];
+      delete this.properties[paddingRight];
     }
 
     if (bottom && bottom != 0) {
