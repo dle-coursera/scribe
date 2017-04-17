@@ -52,13 +52,9 @@ export default class ComponentModel {
        return this._htmlModel.generate();
      }
 
-     let content: string;
+     let content: string = "";
      for (const child of this._children) {
-       if (!content) {
-         content = child.generate();
-       } else {
-         content += child.generate();
-       }
+       content += child.generate();
      }
 
      if (this._children.length > 0) {
