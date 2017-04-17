@@ -1,21 +1,18 @@
+// @flow
+import CSSModel from './CSSModel'
+import HTMLModel from './HTMLModel'
+
 export default class ComponentModel {
-     constructor(html, cssModel) {
-       self.html = html;
-       self.cssModel = cssModel;
-     }
+   constructor(htmlModel: HTMLModel, cssModel: CSSModel) {
+     self.htmlModel = htmlModel;
+     self.cssModel = cssModel;
+   }
 
-     get html() {
-       return self.html;
-     }
+   get htmlModel(): HTMLModel {
+     return self.htmlModel;
+   }
 
-     get cssModel() {
-       return self.cssModel;
-     }
-
-     updateCssWithPadding(topPadding = 0, rightPadding = 0, bottomPadding = 0, leftPadding = 0) {
-       self.topPadding = topPadding;
-       self.rightPadding = rightPadding;
-       self.bottomPadding = bottomPadding;
-       self.leftPadding = leftPadding;
-     }
+   get cssModel(): CSSModel {
+     return self.cssModel;
+   }
 }

@@ -1,7 +1,10 @@
-export const hexColorForNSColor = (nsColor) => {
-  const red = nsColor.redComponent();
-  const green = nsColor.greenComponent();
-  const blue = nsColor.blueComponent();
+// @flow
+import { NSColor } from '../types'
+
+export function hexColorForNSColor(color: NSColor): string {
+  const red = color.redComponent();
+  const green = color.greenComponent();
+  const blue = color.blueComponent();
 
   const redHex = ("0" + red.toString(16)).toUpperCase().slice(-2);
   const greenHex = ("0" + green.toString(16)).toUpperCase().slice(-2);
@@ -10,6 +13,6 @@ export const hexColorForNSColor = (nsColor) => {
   return '#' + redHex + greenHex + blueHex;
 }
 
-export const opacityForNSColor = (nsColor) => {
-  return nsColor.alphaComponent();
+export function opacityForNSColor(color: NSColor): number {
+  return color.alphaComponent();
 }

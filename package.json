@@ -1,23 +1,29 @@
 {
-	"name": "scribe",
-	"version": "1.0.0",
-	"description": "A Sketch extension that generates React code from a Sketch design",
-	"main": "plugin.sketchplugin",
-	"scripts": {
-		"test": "test",
-		"build": "skpm build",
-		"publish": "skpm publish"
-	},
-	"keywords": [
-		"sketch",
-		"react",
-		"design",
-		"component"
-	],
-	"author": "David Le",
-	"license": "MIT",
-	"manifest": "src/manifest.json",
-	"devDependencies": {
-		"skpm": "^0.7.4"
-	}
+  "name": "scribe",
+  "version": "1.0.0",
+  "description": "A Sketch extension that generates React code from a Sketch design",
+  "main": "plugin.sketchplugin",
+  "scripts": {
+    "test": "test",
+    "build": "skpm build",
+    "publish": "skpm publish",
+    "watch": "skpm build --watch"
+  },
+  "keywords": [
+    "sketch",
+    "react",
+    "design",
+    "component"
+  ],
+  "author": "David Le",
+  "license": "MIT",
+  "manifest": "src/manifest.json",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-preset-env": "^1.4.0",
+    "skpm": "^0.8.0"
+  },
+  "dependencies": {
+    "flow-bin": "^0.44.0"
+  }
 }
