@@ -16,7 +16,7 @@ export default class HTMLModel {
     `;
   }
 
-  render(): string {
+  generate(): string {
     return this.reactTemplate(self.tag, self.classes, self.content);
   }
 }

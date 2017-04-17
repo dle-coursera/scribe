@@ -13,8 +13,20 @@ export type Size = {
   height: number,
 }
 
+// Apple types
 export type NSColor = any;
 
 export type NSFont = any;
 
 export type CGRect = any;
+
+// Sketch types
+export type MSArtboardGroup = any;
+
+export type MSLayerGroup = any;
+
+export type MSShapeGroup = any;
+
+export type MSTextLayer = any;
+
+export type MSBitmapLayer = any;

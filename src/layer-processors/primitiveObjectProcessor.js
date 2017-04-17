@@ -1,3 +1,4 @@
+// @flow
 import CSSModel from '../models/CSSModel';
 import HTMLModel from '../models/HTMLModel';
 import ComponentModel from '../models/ComponentModel';
@@ -5,9 +6,17 @@ import { tags } from '../html-support/tags';
 
 import { opacityForNSColor } from '../layer-support/color';
 
-import { NSColor, NSFont, Size, Padding, CGRect } from '../types';
+import {
+  NSColor,
+  NSFont,
+  Size,
+  Padding,
+  CGRect,
+  MSTextLayer,
+  MSBitmapLayer,
+} from '../types';
 
-export const processTextLayer = (textLayer) => {
+export function processTextLayer(textLayer: MSTextLayer) {
   const attributedString = textLayer.attributedString().attributedString();
 
   const length = attributedString.length();
@@ -40,6 +49,6 @@ export const processTextLayer = (textLayer) => {
   // Alignment: Left | Center | Right | Full Adjusted
 }
 
-export const processBitmapLayer = (bitmapLayer) => {
+export function processBitmapLayer(bitmapLayer: MSBitmapLayer) {
   console.log("This is a MSBitmapLayer");
 }

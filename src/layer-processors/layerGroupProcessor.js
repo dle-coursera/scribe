@@ -1,11 +1,20 @@
-import {processShapeLayer} from './shapeLayerProcessor'
-import {processTextLayer, processBitmapLayer} from './primitiveObjectProcessor'
+// @flow
+import {processShapeLayer} from './shapeLayerProcessor';
+import {processTextLayer, processBitmapLayer} from './primitiveObjectProcessor';
 
-export const processLayerGroup = (layerGroup) => {
+import {
+  MSLayerGroup,
+  MSShapeGroup,
+  MSTextLayer,
+  MSBitmapLayer,
+  CGRect
+} from '../types';
+
+export function processLayerGroup(layerGroup: MSLayerGroup) {
   console.log("This is a MSLayerGroup...");
-  const layers = layerGroup.layers();
-  const name = layerGroup.name();
-  const rect = layerGroup.rect();
+  const layers: Array<any> = layerGroup.layers();
+  const name: string = layerGroup.name();
+  const rect: CGRect = layerGroup.rect();
 
   const layerEnumerator = layers.objectEnumerator();
   while (layer = layerEnumerator.nextObject()) {
@@ -15,7 +24,8 @@ export const processLayerGroup = (layerGroup) => {
       processLayerGroup(layer);
     } else if (layer.isKindOfClass(MSTextLayer)) {
       const component = processTextLayer(layer);
-      console.log(component.htmlModel.render());
+      console.log(component.cssModel.generate());
+      console.log(component.htmlModel.generate());
     } else if (layer.isKindOfClass(MSBitmapLayer)) {
       processBitmapLayer(layer);
     }

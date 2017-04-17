@@ -1,10 +1,19 @@
-import {processLayerGroup} from './layerGroupProcessor'
-import {processTextLayer, processBitmapLayer} from './primitiveObjectProcessor'
+// @flow
+import {processLayerGroup} from './layerGroupProcessor';
+import {processTextLayer, processBitmapLayer} from './primitiveObjectProcessor';
 
-export const processArtboards = (artboards) => {
+import {
+  MSArtboardGroup,
+  MSShapeGroup,
+  MSLayerGroup,
+  MSTextLayer,
+  MSBitmapLayer
+} from '../types';
+
+export function processArtboards(artboards: Array<MSArtboardGroup>) {
   const artboardEnumerator = artboards.objectEnumerator();
   while (artboard = artboardEnumerator.nextObject()) {
-    const artboardName = artboard.name().trim();
+    const artboardName: string = artboard.name().trim();
     console.log(`Artboard: ${artboardName}`);
     processArtboardLayers(artboard.layers());
   }
@@ -16,7 +25,7 @@ export const processArtboards = (artboards) => {
 
   MSLayerGroup is a collection of other objects. MSLayerGroup can have children of MSLayerGroup.
 */
-function processArtboardLayers(layers) {
+function processArtboardLayers(layers: Array<any>) {
   const layerEnumerator = layers.objectEnumerator();
   while (layer = layerEnumerator.nextObject()) {
     console.log(`Layer: ${layer.name()} ${layer}`);

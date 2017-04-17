@@ -1,4 +1,7 @@
-export const processShapeLayer = (shapeLayer) => {
+// @flow
+import { MSShapeGroup } from '../types'
+
+export function processShapeLayer(shapeLayer: MSShapeGroup) {
   console.log("This is a shape layer");
   const layers = shapeLayer.layers()
   const layerEnumerator = layers.objectEnumerator();
