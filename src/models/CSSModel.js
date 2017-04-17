@@ -8,12 +8,12 @@ export default class CSSModel {
   selectors: An array of selectors.
   properties: A dictionary of css properties and their values
   */
-  constructor(selectors) {
+  constructor(selectors: Array<string>) {
     this.selectors = selectors;
     this.properties = {};
   }
 
-  getTemplate(selectors, properties) {
+  getTemplate(selectors: Array<string>, properties: any): string {
     const annotatedSelectors = selectors
       .map(selector => '.' + selector)
       .reduce((first, second) => first + ', ' + second);
@@ -105,7 +105,7 @@ export default class CSSModel {
     }
   }
 
-  generate() {
+  generate(): string {
     return this.getTemplate(this.selectors, this.properties)
   }
 }

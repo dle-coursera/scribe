@@ -1,7 +1,8 @@
-export const px = (value) {
+// @flow
+export function px(value: number): string {
   return `${value}px`;
 }
 
-export const em = (value) {
+export function em(value: number): string {
   return `${value}em`;
 }
