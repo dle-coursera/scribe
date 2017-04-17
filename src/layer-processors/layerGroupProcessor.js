@@ -1,37 +1,31 @@
 // @flow
+import CSSModel from '../models/CSSModel';
+import HTMLModel from '../models/HTMLModel';
+import ComponentModel from '../models/ComponentModel';
 import {processShapeLayer} from './shapeLayerProcessor';
 import {processTextLayer, processBitmapLayer} from './primitiveObjectProcessor';
-
 
 import {
   CGRect,
   Padding,
 } from '../types';
 
-export function processLayerGroup(layerGroup: MSLayerGroup) {
+export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
   console.log("This is a MSLayerGroup...");
   const layers: Array<any> = layerGroup.layers();
   const name: string = layerGroup.name();
   const frame: CGRect = layerGroup.rect();
-
-  // TODO: Create group component
 
   const size: Size = {
     width: frame.size.width,
     height: frame.size.height,
   }
 
-  console.log(name);
-  console.log(frame);
+  let htmlModel = new HTMLModel(name, [name]);
+  let cssModel = new CSSModel(name);
+  cssModel.size = size;
 
-  // const cssModel = new CSSModel([name])
-  // cssModel.color = colorValue;
-  // cssModel.opacity = opacityForNSColor(colorValue);
-  // cssModel.size = size;
-  //
-  // const htmlModel = new HTMLModel(tags.p, [name], contentString);
-  //
-  // return new ComponentModel(htmlModel, cssModel);
+  let parentComponent = new ComponentModel(htmlModel, cssModel);
 
   const layerEnumerator = layers.objectEnumerator();
   while (layer = layerEnumerator.nextObject()) {
@@ -48,10 +42,11 @@ export function processLayerGroup(layerGroup: MSLayerGroup) {
 
     if (component) {
       component.cssModel.padding = paddingForLayer(layer, frame);
-      console.log(component.cssModel.generate());
-      console.log(component.htmlModel.generate());
+      parentComponent.addChild(component);
     }
   }
+
+  return parentComponent;
 }
 
 function paddingForLayer(layer: any, containerFrame: CGRect): Padding {
