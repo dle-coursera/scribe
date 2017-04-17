@@ -16,7 +16,7 @@ import {
   MSBitmapLayer,
 } from '../types';
 
-export function processTextLayer(textLayer: MSTextLayer) {
+export function processTextLayer(textLayer: MSTextLayer): ComponentModel {
   const attributedString = textLayer.attributedString().attributedString();
 
   const length = attributedString.length();

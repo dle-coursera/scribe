@@ -20,7 +20,7 @@ export type NSFont = any;
 
 export type CGRect = any;
 
-// Sketch types
+// Sketch types. Avoid importing these types if using isKindOfClass since it conflicts with the real types.
 export type MSArtboardGroup = any;
 
 export type MSLayerGroup = any;
@@ -30,3 +30,15 @@ export type MSShapeGroup = any;
 export type MSTextLayer = any;
 
 export type MSBitmapLayer = any;
+
+export type MSRectangleShape = any;
+
+export type MSOvalShape = any;
+
+export type MSStarShape = any;
+
+export type MSPolygonShape = any;
+
+export type MSTriangleShape = any;
+
+export type MSShapePathLayer = any;

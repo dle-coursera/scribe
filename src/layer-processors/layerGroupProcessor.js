@@ -3,10 +3,6 @@ import {processShapeLayer} from './shapeLayerProcessor';
 import {processTextLayer, processBitmapLayer} from './primitiveObjectProcessor';
 
 import {
-  MSLayerGroup,
-  MSShapeGroup,
-  MSTextLayer,
-  MSBitmapLayer,
   CGRect
 } from '../types';
 

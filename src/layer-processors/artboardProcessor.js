@@ -2,13 +2,7 @@
 import {processLayerGroup} from './layerGroupProcessor';
 import {processTextLayer, processBitmapLayer} from './primitiveObjectProcessor';
 
-import {
-  MSArtboardGroup,
-  MSShapeGroup,
-  MSLayerGroup,
-  MSTextLayer,
-  MSBitmapLayer
-} from '../types';
+import { MSArtboardGroup } from '../types';
 
 export function processArtboards(artboards: Array<MSArtboardGroup>) {
   const artboardEnumerator = artboards.objectEnumerator();
