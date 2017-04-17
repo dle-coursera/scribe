@@ -39,7 +39,8 @@ function processRectangle(rectangle: MSRectangle) {
   const cssModel = new CSSModel([name])
   cssModel.size = size;
 
-  const htmlModel = new HTMLModel(tags.div, [name]);
+  const component = new ComponentModel(cssModel);
+  component.htmlModel = new HTMLModel(tags.div, [name]);
 
-  return new ComponentModel(htmlModel, cssModel);
+  return component;
 }

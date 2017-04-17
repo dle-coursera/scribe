@@ -1,6 +1,5 @@
 // @flow
 import CSSModel from '../models/CSSModel';
-import HTMLModel from '../models/HTMLModel';
 import ComponentModel from '../models/ComponentModel';
 import {processShapeLayer} from './shapeLayerProcessor';
 import {processTextLayer, processBitmapLayer} from './primitiveObjectProcessor';
@@ -21,11 +20,11 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
     height: frame.size.height,
   }
 
-  let htmlModel = new HTMLModel(name, [name]);
   let cssModel = new CSSModel(name);
   cssModel.size = size;
 
-  let parentComponent = new ComponentModel(htmlModel, cssModel);
+  let parentComponent = new ComponentModel(cssModel);
+  parentComponent.name = name;
 
   const layerEnumerator = layers.objectEnumerator();
   while (layer = layerEnumerator.nextObject()) {
@@ -41,7 +40,7 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
     }
 
     if (component) {
-      component.cssModel.padding = paddingForLayer(layer, frame);
+      component.cssModel.padding = paddingForLayer(layer.rect(), frame);
       parentComponent.addChild(component);
     }
   }
@@ -49,9 +48,7 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
   return parentComponent;
 }
 
-function paddingForLayer(layer: any, containerFrame: CGRect): Padding {
-  const layerFrame = layer.rect();
-
+function paddingForLayer(layerFrame: CGRect, containerFrame: CGRect): Padding {
   const padding: Padding = {
     top: layerFrame.origin.y,
     right: containerFrame.size.width - (layerFrame.origin.x + layerFrame.size.width),

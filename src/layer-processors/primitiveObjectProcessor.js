@@ -39,9 +39,9 @@ export function processTextLayer(textLayer: MSTextLayer): ComponentModel {
   cssModel.opacity = opacityForNSColor(colorValue);
   cssModel.size = size;
 
-  const htmlModel = new HTMLModel(tags.p, [name], contentString);
-
-  return new ComponentModel(htmlModel, cssModel);
+  const component = new ComponentModel(cssModel);
+  component.htmlNode = new HTMLModel(tags.p, [name], contentString);
+  return component;
 
   // Typeface: Helvetica
   // Weight : Regular | Oblique | Lite | Lite Oblique | Bold | Bold Oblique

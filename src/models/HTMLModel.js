@@ -3,9 +3,9 @@ import { Tag } from '../types';
 
 export default class HTMLModel {
   constructor(tag: Tag, classes: Array<string>, content: string) {
-    self.tag = tag;
-    self.content = content;
-    self.classes = classes;
+    this.tag = tag;
+    this.content = content;
+    this.classes = classes;
   }
 
   reactTemplate(tag: Tag, classes: Array<string>, content: string): string {
@@ -17,6 +17,6 @@ export default class HTMLModel {
   }
 
   generate(): string {
-    return this.reactTemplate(self.tag, self.classes, self.content);
+    return this.reactTemplate(this.tag, this.classes, this.content);
   }
 }

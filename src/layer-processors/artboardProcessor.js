@@ -27,7 +27,8 @@ function processArtboardLayers(layers: Array<any>) {
       // TODO: This can be a path, oval, rectangle, etc
       console.log("Shapes are not yet supported");
     } else if (layer.isKindOfClass(MSLayerGroup)) {
-      processLayerGroup(layer);
+      let component = processLayerGroup(layer);
+      console.log(component.generate());
     } else if (layer.isKindOfClass(MSTextLayer)) {
       processTextLayer(layer);
     } else if (layer.isKindOfClass(MSBitmapLayer)) {
