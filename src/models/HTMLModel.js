@@ -11,7 +11,7 @@ export default class HTMLModel {
   reactTemplate(tag: Tag, classes: Array<string>, content: string): string {
     if (classes.length > 0) {
       return `
-        <${tag} className="${classes}"
+        <${tag} className="${classes}">
           ${content}
         </${tag}>
       `;
