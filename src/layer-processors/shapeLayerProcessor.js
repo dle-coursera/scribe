@@ -26,7 +26,7 @@ export function processShapeLayer(shapeLayer: MSShapeGroup): ComponentModel {
   }
 }
 
-function processRectangle(rectangle: MSRectangle) {
+function processRectangle(rectangle: MSRectangleShape) {
   console.log("A rectangle");
   const frame: CGRect = rectangle.rect();
   const name: string = rectangle.name();
@@ -40,7 +40,7 @@ function processRectangle(rectangle: MSRectangle) {
   cssModel.size = size;
 
   const component = new ComponentModel(cssModel);
-  component.htmlModel = new HTMLModel(tags.div, [name]);
+  component.htmlModel = new HTMLModel(tags.div, [name], "Rectangle content");
 
   return component;
 }

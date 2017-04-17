@@ -9,11 +9,19 @@ export default class HTMLModel {
   }
 
   reactTemplate(tag: Tag, classes: Array<string>, content: string): string {
-    return `
-      <${tag} className="${classes}"
-        ${content}
-      </${tag}>
-    `;
+    if (classes.length > 0) {
+      return `
+        <${tag} className="${classes}"
+          ${content}
+        </${tag}>
+      `;
+    } else {
+      return `
+        <${tag}>
+          ${content}
+        </${tag}>
+      `;
+    }
   }
 
   generate(): string {

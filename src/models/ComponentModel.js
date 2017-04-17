@@ -54,7 +54,11 @@ export default class ComponentModel {
 
      let content: string;
      for (const child of this._children) {
-       content += child.generate();
+       if (!content) {
+         content = child.generate();
+       } else {
+         content += child.generate();
+       }
      }
 
      if (this._children.length > 0) {
@@ -62,7 +66,7 @@ export default class ComponentModel {
        content = htmlModel.generate();
      }
 
-     return this.reactTemplate(this.name, content);
+     return this.reactTemplate(this._name, content);
 
 
      // The CSS of the child determines padding

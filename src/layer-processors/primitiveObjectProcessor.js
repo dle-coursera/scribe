@@ -40,7 +40,8 @@ export function processTextLayer(textLayer: MSTextLayer): ComponentModel {
   cssModel.size = size;
 
   const component = new ComponentModel(cssModel);
-  component.htmlNode = new HTMLModel(tags.p, [name], contentString);
+  component.htmlModel = new HTMLModel(tags.p, [name], contentString);
+
   return component;
 
   // Typeface: Helvetica
