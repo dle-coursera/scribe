@@ -1,8 +1,11 @@
-import {processArtboards} from './layer-processors/artboardProcessor';
+import { processArtboards } from './layer-processors/artboardProcessor';
+import { globalIncludesMap } from './fileSupport';
 
 export default function (context) {
   context.document.showMessage('It\'s alive 333 🙌')
   const documentName = context.document.displayName();
+  setupProjectDirectory(documentName);
+
   const document = context.document;
   const pages = document.pages();
 
@@ -11,4 +14,16 @@ export default function (context) {
     console.log(`Page: ${page.name()}`);
     processArtboards(page.artboards());
   }
+}
+
+function setupProjectDirectory(documentName: string) {
+  const projectDirectory = `~/Documents/Scribe/${documentName}`;
+  const testDirectory = `${projectDirectory}/__tests__`;
+  const styleDirectory = `${projectDirectory}/__styles__`;
+
+  globalIncludesMap['projectDirectory'] = projectDirectory;
+  globalIncludesMap['testDirectory'] = testDirectory;
+  globalIncludesMap['styleDirectory'] = styleDirectory;
+
+  // TODO: Generate the folders here
 }

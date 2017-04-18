@@ -2,6 +2,7 @@
 import CSSModel from './CSSModel';
 import HTMLModel from './HTMLModel';
 import { tags } from '../html-support/tags';
+import { globalIncludesMap } from '../fileSupport';
 
 export default class ComponentModel {
    constructor(cssModel: CSSModel) {
@@ -70,7 +71,9 @@ export default class ComponentModel {
      }
 
      const reactContent = this.reactTemplate(this._name, childContent);
-     // TODO: Save here
+
+     const projectDirectory = globalIncludesMap['projectDirectory'];
+     globalIncludesMap[this._name] = `${projectDirectory}/${this._name}`;
 
      if (fromParent) {
        return this.childReactTemplate(this._name);
