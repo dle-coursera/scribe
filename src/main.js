@@ -24,6 +24,8 @@ function setupProjectDirectory(documentName: string) {
   globalIncludesMap['projectDirectory'] = projectDirectory;
   globalIncludesMap['testDirectory'] = testDirectory;
   globalIncludesMap['styleDirectory'] = styleDirectory;
+  globalIncludesMap['relativeTestDirectory'] = './__tests__';
+  globalIncludesMap['relativeStyleDirectory'] = './__styles__';
 
   // TODO: Generate the folders here
 }

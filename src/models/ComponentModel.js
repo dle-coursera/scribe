@@ -34,9 +34,11 @@ export default class ComponentModel {
      this._children.push(component);
    }
 
-   reactTemplate(name: string, content: string): string {
+   reactTemplate(name: string, cssPath: string, content: string): string {
      return `
      import React from 'react';
+
+     import '${cssPath}';
 
      class ${name} extends React.Component {
        render() {
@@ -72,10 +74,19 @@ export default class ComponentModel {
        childContent = htmlModel.generate();
      }
 
-     const reactContent = this.reactTemplate(this._name, childContent);
-
      const projectDirectory = globalIncludesMap['projectDirectory'];
      globalIncludesMap[this._name] = `${projectDirectory}/${this._name}`;
+
+     const relativeStyleDirectory = globalIncludesMap['relativeStyleDirectory'];
+     const cssFilePath = `${relativeStyleDirectory}/${this._name}`;
+
+     const reactContent = this.reactTemplate(this._name, cssFilePath, childContent);
+     const cssContent = this._cssModel.generate();
+
+     console.log(reactContent);
+     console.log(cssContent);
+
+     // TODO: Save the CSS and JSX here.
 
      if (fromParent) {
        return this.childReactTemplate(this._name);

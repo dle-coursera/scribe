@@ -13,6 +13,7 @@ export default class CSSModel {
     this.properties = {};
   }
 
+  // Private. Should not be called externally.
   getTemplate(selectors: Array<string>, properties: any): string {
     const annotatedSelectors = selectors
       .map(selector => '.' + selector)

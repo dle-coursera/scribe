@@ -20,7 +20,7 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
     height: frame.size.height,
   }
 
-  let cssModel = new CSSModel(name);
+  let cssModel = new CSSModel([name]);
   cssModel.size = size;
 
   let parentComponent = new ComponentModel(cssModel);
@@ -43,7 +43,7 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
     } else if (layer.isKindOfClass(MSBitmapLayer)) {
       processBitmapLayer(layer);
     }
-    
+
     if (component) {
       component.cssModel.padding = padding;
       parentComponent.addChild(component);
