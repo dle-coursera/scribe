@@ -36,6 +36,8 @@ export default class ComponentModel {
 
    reactTemplate(name: string, content: string): string {
      return `
+     import React from 'react';
+
      class ${name} extends React.Component {
        render() {
          return (
