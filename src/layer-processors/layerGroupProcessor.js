@@ -27,8 +27,13 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
   parentComponent.name = name;
 
   const layerEnumerator = layers.objectEnumerator();
+
   while (layer = layerEnumerator.nextObject()) {
     let component: Component;
+
+    // Padding computation needs to be here, because recursivly calling this function somehow sets to currently layer to null
+    const padding = paddingForLayer(layer.rect(), frame);
+
     if (layer.isKindOfClass(MSShapeGroup)) {
       component = processShapeLayer(layer);
     } else if (layer.isKindOfClass(MSLayerGroup)) {
@@ -38,9 +43,9 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
     } else if (layer.isKindOfClass(MSBitmapLayer)) {
       processBitmapLayer(layer);
     }
-
+    
     if (component) {
-      component.cssModel.padding = paddingForLayer(layer.rect(), frame);
+      component.cssModel.padding = padding;
       parentComponent.addChild(component);
     }
   }

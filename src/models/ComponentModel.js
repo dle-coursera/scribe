@@ -44,32 +44,55 @@ export default class ComponentModel {
      }
 
      module.exports = ${name};
-     `
+     `;
    }
 
-   generate(): string {
+   childReactTemplate(name: string): string {
+     return `
+      <${name} />
+     `;
+   }
+
+   generate(fromParent: bool = false): string {
      if (this._htmlModel) {
-       return this._htmlModel.generate();
+        return this._htmlModel.generate();
      }
 
-     let content: string = "";
+     // Generate the react component
+     let childContent: string = "";
      for (const child of this._children) {
-       content += child.generate();
+       childContent += child.generate(true);
      }
 
      if (this._children.length > 0) {
-       let htmlModel = new HTMLModel(tags.div, [], content);
-       content = htmlModel.generate();
+       let htmlModel = new HTMLModel(tags.div, [], childContent);
+       childContent = htmlModel.generate();
      }
 
-     return this.reactTemplate(this._name, content);
+     const reactContent = this.reactTemplate(this._name, childContent);
+     // TODO: Save here
 
+     if (fromParent) {
+       return this.childReactTemplate(this._name);
+     } else {
+       return reactContent;
+     }
+
+     // How to build includes
+     // Need to scan through every object and create a global lookup table
+     // Breath then depth
+     // Then generate the corresponding
+
+     // |----
+     //    |
+     //    |
+     //    |----
+     //    |   |
+     //    |   |---
+     //    |   |  |
+     //    |   |
 
      // The CSS of the child determines padding
      // If the child contains a basic HTML tag, then render the content in the parent.
-     // If the child a ReactModel, then use the ReactModel
-
-     // TODO: Generate the React component here
-     // Content is the children inside of this component
    }
 }
