@@ -14,6 +14,10 @@ export default class ComponentModel {
      this._name = name;
    }
 
+   get name(): string {
+     return this._name;
+   }
+
    set htmlModel(htmlModel: HTMLModel) {
      this._htmlModel = htmlModel;
    }
@@ -34,11 +38,19 @@ export default class ComponentModel {
      this._children.push(component);
    }
 
-   reactTemplate(name: string, cssPath: string, content: string): string {
+   reactTemplate(name: string, content: string, cssPath: string, additionalFilePaths: Array<string>): string {
+     // Build file imports
+     let otherImports: string = '';
+     if (additionalFilePaths && additionalFilePaths.length > 0) {
+       const first = `import '${additionalFilePaths[0]}';`;
+       otherImports = additionalFilePaths.reduce((first, second) => first + `import '${second}';`, '');
+     }
+
+     otherImports += `import '${cssPath}';`;
+
      return `
      import React from 'react';
-
-     import '${cssPath}';
+     ${otherImports}
 
      class ${name} extends React.Component {
        render() {
@@ -63,24 +75,31 @@ export default class ComponentModel {
         return this._htmlModel.generate();
      }
 
+     // This needs to be called before child.generate
+     this.registerComponentFilePaths();
+
      // Generate the react component
      let childContent: string = "";
+     const additionalFilePaths: Array<string> = [];
      for (const child of this._children) {
+       if (child.name) {
+         const childFilePath = globalIncludesMap[child.name];
+         additionalFilePaths.push(childFilePath);
+       }
        childContent += child.generate(true);
      }
 
-     if (this._children.length > 0) {
+     // Wrap content in a div if there is more than one child
+     if (this._children.length > 1) {
        let htmlModel = new HTMLModel(tags.div, [], childContent);
        childContent = htmlModel.generate();
      }
 
-     const projectDirectory = globalIncludesMap['projectDirectory'];
-     globalIncludesMap[this._name] = `${projectDirectory}/${this._name}`;
-
+     // CSS file path
      const relativeStyleDirectory = globalIncludesMap['relativeStyleDirectory'];
      const cssFilePath = `${relativeStyleDirectory}/${this._name}`;
 
-     const reactContent = this.reactTemplate(this._name, cssFilePath, childContent);
+     const reactContent = this.reactTemplate(this._name, childContent, cssFilePath, additionalFilePaths);
      const cssContent = this._cssModel.generate();
 
      console.log(reactContent);
@@ -93,22 +112,18 @@ export default class ComponentModel {
      } else {
        return reactContent;
      }
+   }
 
-     // How to build includes
-     // Need to scan through every object and create a global lookup table
-     // Breath then depth
-     // Then generate the corresponding
+   registerComponentFilePaths() {
+     // Breath traverse through all the child components and get their names.
+     // This makes the child available deeper down the view hierarchy.
+     const relativeDirPath = globalIncludesMap['relativeComponentDirectory'];
+     for (const child of this._children) {
+       if (child.name) {
+         globalIncludesMap[child.name] = `${relativeDirPath}/${child.name}`;
+       }
+     }
 
-     // |----
-     //    |
-     //    |
-     //    |----
-     //    |   |
-     //    |   |---
-     //    |   |  |
-     //    |   |
-
-     // The CSS of the child determines padding
-     // If the child contains a basic HTML tag, then render the content in the parent.
+     globalIncludesMap[this._name] = `${relativeDirPath}/${this._name}`;
    }
 }
