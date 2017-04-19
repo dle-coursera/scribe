@@ -128,8 +128,10 @@ export function cssFontStylesForFont(font: NSFont): any {
     fontStyleValue = fontStyles.normal;
   }
 
+  const fontFamilyValue = font.familyName().replace(/[^a-zA-Z0-9]/g, '');
+
   return {
-    [fontFamily]: font.familyName(),
+    [fontFamily]: fontFamilyValue,
     [fontSize]: px(fontPixels),
     [fontWeight]: fontWeightValue,
     [fontStyle]: fontStyleValue,
