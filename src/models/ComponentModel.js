@@ -100,9 +100,8 @@ export default class ComponentModel {
 
      // CSS file path
      const relativeStyleDirectory = globalIncludesMap['relativeStyleDirectory'];
-     // TODO: add back once we can create folder
-     // const cssFilePath = `${relativeStyleDirectory}/${this._name}`;
-     const cssFilePath = `./${this._name}.css`;
+     const cssFilePath = `${relativeStyleDirectory}/${this._name}.css`;
+
      const reactContent = this.reactTemplate(this._name, reactChildContent, cssFilePath, additionalFilePaths);
 
      console.log(reactContent);
@@ -132,14 +131,14 @@ export default class ComponentModel {
    }
 
    saveCSS(content: string) {
-     const projectDirectory = globalIncludesMap.projectDirectory;
-     saveTextToFile(`${projectDirectory}/${this._name}.css`, content);
-     saveTextToFile(`${projectDirectory}/${this._name}CSS.json`, JSON.stringify(content));
+     const {styleDirectory, debugDirectory} = globalIncludesMap;
+     saveTextToFile(`${styleDirectory}/${this._name}.css`, content);
+     saveTextToFile(`${debugDirectory}/${this._name}CSS.json`, JSON.stringify(content));
    }
 
    saveJSX(content: string) {
-     const projectDirectory = globalIncludesMap.projectDirectory;
+     const {projectDirectory, debugDirectory} = globalIncludesMap;
      saveTextToFile(`${projectDirectory}/${this._name}.jsx`, content);
-     saveTextToFile(`${projectDirectory}/${this._name}.json`, JSON.stringify(content));
+     saveTextToFile(`${debugDirectory}/${this._name}.json`, JSON.stringify(content));
    }
 }
