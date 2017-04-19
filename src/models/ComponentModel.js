@@ -119,7 +119,7 @@ export default class ComponentModel {
      // This makes the child available deeper down the view hierarchy.
      const relativeDirPath = globalIncludesMap['relativeComponentDirectory'];
      for (const child of this._children) {
-       if (child.name) {
+       if (child.name && !globalIncludesMap[child.name]) {
          globalIncludesMap[child.name] = `${relativeDirPath}/${child.name}`;
        }
      }
