@@ -5,6 +5,7 @@ import ComponentModel from '../models/ComponentModel';
 import { tags } from '../html-support/tags';
 import { hexColorForMSColor } from '../layer-support/color';
 import { px } from '../css-support/units';
+import { positionValues } from '../css-support/cssPropertyValues';
 
 import {
   MSShapeGroup,
@@ -62,6 +63,10 @@ function processRectangle(rectangle: MSRectangleShape, shapeLayer: MSShapeGroup)
   cssModel.backgroundColor = hexFillColor;
   cssModel.borderColor = hexBorderColor;
   cssModel.borderWidth = px(thickness);
+
+  // Shapes are not part of the layout. This might change in the future.
+  cssModel.position = positionValues.absolute;
+  cssModel.zIndex = -1;
 
   const component = new ComponentModel(cssModel);
   component.htmlModel = new HTMLModel(tags.div, [name]);

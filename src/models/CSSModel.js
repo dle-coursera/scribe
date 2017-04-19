@@ -35,6 +35,17 @@ export default class CSSModel {
     `;
   }
 
+  // value can be obtained from cssPropertyValues.positionValues
+  set position(value: string) {
+    const { position } = visualFormatting;
+    this.properties[position] = value;
+  }
+
+  set zIndex(value: number) {
+    const { zIndex } = visualFormatting;
+    this.properties[zIndex] = value;
+  }
+
   // The styles should be retrieved from fontSupport.cssFontStylesForFont
   set fontStyles(styles: any) {
     this.properties = Object.assign({}, this.properties, styles);
