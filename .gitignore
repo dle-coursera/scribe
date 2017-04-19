@@ -2,7 +2,7 @@
 plugin.sketchplugin/Contents/Sketch
 public/components/*.js*
 public/components/*.c*
-
+config.js
 
 # npm
 node_modules
