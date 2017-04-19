@@ -18,17 +18,19 @@ export default function (context) {
 }
 
 function setupProjectDirectory(documentName: string) {
-  // TODO: Add back documentName sub-folder once we can auto-generate folders
-  const projectDirectory = `${projectRoot}/public/components/`;
+  const rootDirectory = `${projectRoot}/public/components`;
+  const projectDirectory = `${rootDirectory}/${documentName}`;
+  const debugDirectory = `${projectDirectory}/__debug__`;
   const testDirectory = `${projectDirectory}/__tests__`;
   const styleDirectory = `${projectDirectory}/__styles__`;
 
+  globalIncludesMap['rootDirectory'] = rootDirectory;
   globalIncludesMap['projectDirectory'] = projectDirectory;
+  globalIncludesMap['debugDirectory'] = debugDirectory;
   globalIncludesMap['testDirectory'] = testDirectory;
   globalIncludesMap['styleDirectory'] = styleDirectory;
   globalIncludesMap['relativeComponentDirectory'] = '.';
+  globalIncludesMap['relativeDebugDirectory'] = './__debug__';
   globalIncludesMap['relativeTestDirectory'] = './__tests__';
   globalIncludesMap['relativeStyleDirectory'] = './__styles__';
-
-  // TODO: Generate the folders here
 }
