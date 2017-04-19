@@ -79,21 +79,23 @@ export default class ComponentModel {
      // This needs to be called before child.generate
      this.registerComponentFilePaths();
 
-     // Generate the react component
-     let childContent: string = "";
+     // Generate the react compnent and CSS
+     let cssContent = this._cssModel.generate();
+     let reactChildContent: string = "";
      const additionalFilePaths: Array<string> = [];
      for (const child of this._children) {
        if (child.name) {
          const childFilePath = globalIncludesMap[child.name];
          additionalFilePaths.push(childFilePath);
        }
-       childContent += child.generate(true);
+       reactChildContent += child.generate(true);
+       cssContent += child.cssModel.generate();
      }
 
      // Wrap content in a div if there is more than one child
      if (this._children.length > 1) {
-       let htmlModel = new HTMLModel(tags.div, [this._name], childContent);
-       childContent = htmlModel.generate();
+       let htmlModel = new HTMLModel(tags.div, [this._name], reactChildContent);
+       reactChildContent = htmlModel.generate();
      }
 
      // CSS file path
@@ -101,18 +103,13 @@ export default class ComponentModel {
      // TODO: add back once we can create folder
      // const cssFilePath = `${relativeStyleDirectory}/${this._name}`;
      const cssFilePath = `./${this._name}.css`;
-
-     const reactContent = this.reactTemplate(this._name, childContent, cssFilePath, additionalFilePaths);
-     const cssContent = this._cssModel.generate();
+     const reactContent = this.reactTemplate(this._name, reactChildContent, cssFilePath, additionalFilePaths);
 
      console.log(reactContent);
      console.log(cssContent);
 
-     const projectDirectory = globalIncludesMap.projectDirectory;
-     saveTextToFile(`${projectDirectory}/${this._name}.jsx`, reactContent);
-     saveTextToFile(`${projectDirectory}/${this._name}.css`, cssContent);
-     saveTextToFile(`${projectDirectory}/${this._name}.json`, JSON.stringify(reactContent));
-     saveTextToFile(`${projectDirectory}/${this._name}CSS.json`, JSON.stringify(cssContent));
+     this.saveCSS(cssContent);
+     this.saveJSX(reactContent);
 
      if (fromParent) {
        return this.childReactTemplate(this._name);
@@ -132,5 +129,17 @@ export default class ComponentModel {
      }
 
      globalIncludesMap[this._name] = `${relativeDirPath}/${this._name}`;
+   }
+
+   saveCSS(content: string) {
+     const projectDirectory = globalIncludesMap.projectDirectory;
+     saveTextToFile(`${projectDirectory}/${this._name}.css`, content);
+     saveTextToFile(`${projectDirectory}/${this._name}CSS.json`, JSON.stringify(content));
+   }
+
+   saveJSX(content: string) {
+     const projectDirectory = globalIncludesMap.projectDirectory;
+     saveTextToFile(`${projectDirectory}/${this._name}.jsx`, content);
+     saveTextToFile(`${projectDirectory}/${this._name}.json`, JSON.stringify(content));
    }
 }
