@@ -9,9 +9,10 @@ export function processShapeLayer(shapeLayer: MSShapeGroup): ComponentModel {
   console.log("This is a shape layer");
   const layers = shapeLayer.layers()
   const layerEnumerator = layers.objectEnumerator();
+
   while (layer = layerEnumerator.nextObject()) {
     if (layer.isKindOfClass(MSRectangleShape)) { // A rectangle
-      return processRectangle(layer);
+      return processRectangle(layer, shapeLayer);
     } else if (layer.isKindOfClass(MSOvalShape)) { // An oval
       console.log("An oval");
     } else if (layer.isKindOfClass(MSStarShape)) {
@@ -26,10 +27,10 @@ export function processShapeLayer(shapeLayer: MSShapeGroup): ComponentModel {
   }
 }
 
-function processRectangle(rectangle: MSRectangleShape) {
+function processRectangle(rectangle: MSRectangleShape, shapeLayer: MSShapeGroup): ComponentModel {
   console.log("A rectangle");
   const frame: CGRect = rectangle.rect();
-  const name: string = rectangle.name();
+  const name: string = shapeLayer.name();
 
   const size: Size = {
     width: frame.size.width,
