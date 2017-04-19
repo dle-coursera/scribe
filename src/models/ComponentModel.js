@@ -3,6 +3,7 @@ import CSSModel from './CSSModel';
 import HTMLModel from './HTMLModel';
 import { tags } from '../html-support/tags';
 import { globalIncludesMap } from '../fileSupport';
+import { saveTextToFile } from '../fileSupport';
 
 export default class ComponentModel {
    constructor(cssModel: CSSModel) {
@@ -43,7 +44,7 @@ export default class ComponentModel {
      let otherImports: string = '';
      if (additionalFilePaths && additionalFilePaths.length > 0) {
        const first = `import '${additionalFilePaths[0]}';`;
-       otherImports = additionalFilePaths.reduce((first, second) => first + `import '${second}';`, '');
+       otherImports = additionalFilePaths.reduce((first, second) => first + `import ${second.replace('./', '')} from '${second}';`, '');
      }
 
      otherImports += `import '${cssPath}';`;
@@ -97,7 +98,9 @@ export default class ComponentModel {
 
      // CSS file path
      const relativeStyleDirectory = globalIncludesMap['relativeStyleDirectory'];
-     const cssFilePath = `${relativeStyleDirectory}/${this._name}`;
+     // TODO: add back once we can create folder
+     // const cssFilePath = `${relativeStyleDirectory}/${this._name}`;
+     const cssFilePath = `./${this._name}.css`;
 
      const reactContent = this.reactTemplate(this._name, childContent, cssFilePath, additionalFilePaths);
      const cssContent = this._cssModel.generate();
@@ -105,7 +108,11 @@ export default class ComponentModel {
      console.log(reactContent);
      console.log(cssContent);
 
-     // TODO: Save the CSS and JSX here.
+     const projectDirectory = globalIncludesMap.projectDirectory;
+     saveTextToFile(`${projectDirectory}/${this._name}.jsx`, reactContent);
+     saveTextToFile(`${projectDirectory}/${this._name}.css`, cssContent);
+     saveTextToFile(`${projectDirectory}/${this._name}.json`, JSON.stringify(reactContent));
+     saveTextToFile(`${projectDirectory}/${this._name}CSS.json`, JSON.stringify(cssContent));
 
      if (fromParent) {
        return this.childReactTemplate(this._name);

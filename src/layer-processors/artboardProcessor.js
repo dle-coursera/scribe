@@ -3,6 +3,8 @@ import {processLayerGroup} from './layerGroupProcessor';
 import {processTextLayer, processBitmapLayer} from './primitiveObjectProcessor';
 
 import { MSArtboardGroup } from '../types';
+import { globalIncludesMap } from '../fileSupport';
+import { createMappingFile } from '../fileSupport';
 
 export function processArtboards(artboards: Array<MSArtboardGroup>) {
   const artboardEnumerator = artboards.objectEnumerator();
@@ -11,6 +13,7 @@ export function processArtboards(artboards: Array<MSArtboardGroup>) {
     console.log(`Artboard: ${artboardName}`);
     processArtboardLayers(artboard.layers());
   }
+  createMappingFile();
 }
 
 /*

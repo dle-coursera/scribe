@@ -1,0 +1,61 @@
+html, body, #root
+  height 100%
+
+body 
+  margin 0
+  padding 0
+  background #f3f5f6
+  font-family -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol"
+
+.rc-Wrapper
+  height 100%
+  width 100%
+  display table
+  font-size 1em
+  
+  .cell
+    vertical-align top
+    display table-cell
+
+  .nav
+    background white
+    color #39464E
+    width 200px
+    border-right solid 1px #e9eced
+    
+  .nav-title
+    font-size 1.3em
+    text-align center
+    
+  .nav-item
+    padding 8px 20px
+    cursor pointer
+    
+    &.active
+      background #dad7ef
+
+  .section
+    margin 0
+    border-right 1px solid #cfd6d9
+    width 49.5%
+    height 100%
+    display inline-block
+    vertical-align top
+    
+  pre
+    overflow auto
+    
+  .section-title
+    margin 0 0 12px
+    color #7f94a1
+    text-transform uppercase
+    font-weight normal
+    font-size 0.9em
+    text-align right 
+    padding 12px
+    
+  .section-content
+    padding 12px
+    
+  .sub-section
+    border-top 1px solid #cfd6d9

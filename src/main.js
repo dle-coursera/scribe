@@ -1,5 +1,6 @@
 import { processArtboards } from './layer-processors/artboardProcessor';
 import { globalIncludesMap } from './fileSupport';
+import { projectRoot } from '../config';
 
 export default function (context) {
   context.document.showMessage('It\'s alive 333 🙌')
@@ -17,7 +18,8 @@ export default function (context) {
 }
 
 function setupProjectDirectory(documentName: string) {
-  const projectDirectory = `~/Documents/Scribe/${documentName}`;
+  // TODO: Add back documentName sub-folder once we can auto-generate folders
+  const projectDirectory = `${projectRoot}/public/components/`;
   const testDirectory = `${projectDirectory}/__tests__`;
   const styleDirectory = `${projectDirectory}/__styles__`;
 
