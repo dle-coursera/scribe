@@ -68,7 +68,7 @@ export default class CSSModel {
   }
 
   // Ex. 15px
-  set borderWidth(string: string) {
+  set borderWidth(value: string) {
     const { borderWidth } = boxModel;
     this.properties[borderWidth] = value;
   }
