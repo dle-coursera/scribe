@@ -64,7 +64,7 @@ function processRectangle(rectangle: MSRectangleShape, shapeLayer: MSShapeGroup)
   cssModel.borderWidth = px(thickness);
 
   const component = new ComponentModel(cssModel);
-  component.htmlModel = new HTMLModel(tags.div, [name], "Rectangle content");
+  component.htmlModel = new HTMLModel(tags.div, [name]);
 
   return component;
 }

@@ -8,19 +8,33 @@ export default class HTMLModel {
     this.classes = classes;
   }
 
-  reactTemplate(tag: Tag, classes: Array<string>, content: string): string {
+  reactTemplate(tag: Tag, classes: Array<string>, content?: string): string {
     if (classes.length > 0) {
-      return `
-        <${tag} className="${classes}">
-          ${content}
-        </${tag}>
-      `;
+      if (content) {
+        return `
+          <${tag} className="${classes}">
+            ${content}
+          </${tag}>
+        `;
+      } else {
+        return `
+          <${tag} className="${classes}">
+          </${tag}>
+        `;
+      }
     } else {
-      return `
-        <${tag}>
-          ${content}
-        </${tag}>
-      `;
+      if (content) {
+        return `
+          <${tag}>
+            ${content}
+          </${tag}>
+        `;
+      } else {
+        return `
+          <${tag}>
+          </${tag}>
+        `;
+      }
     }
   }
 
