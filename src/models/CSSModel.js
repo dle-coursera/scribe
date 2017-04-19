@@ -2,6 +2,7 @@
 import { boxModel, visualFormatting, colorsAndBackground } from '../css-support/cssProperties';
 import { hexColorForNSColor, alphaForNSColor } from '../layer-support/color';
 import { Padding, Size } from '../types';
+import { px } from '../css-support/units';
 
 export default class CSSModel {
   /*
@@ -61,13 +62,13 @@ export default class CSSModel {
     const { width, height} = visualFormatting;
 
     if (widthValue && widthValue != 0) {
-      this.properties[width] = widthValue;
+      this.properties[width] = px(widthValue);
     } else {
       delete this.properties[width];
     }
 
     if (heightValue && heightValue != 0) {
-      this.properties[height] = heightValue;
+      this.properties[height] = px(heightValue);
     } else {
       delete this.properties[height];
     }
@@ -82,25 +83,25 @@ export default class CSSModel {
     const {paddingTop, paddingRight, paddingBottom, paddingLeft} = boxModel;
 
     if (top && top != 0) {
-      this.properties[paddingTop] = top;
+      this.properties[paddingTop] = px(top);
     } else {
       delete this.properties[paddingTop];
     }
 
     if (right && right != 0) {
-      this.properties[paddingRight] = right;
+      this.properties[paddingRight] = px(right);
     } else {
       delete this.properties[paddingRight];
     }
 
     if (bottom && bottom != 0) {
-      this.properties[paddingBottom] = bottom;
+      this.properties[paddingBottom] = px(bottom);
     } else {
       delete this.properties[paddingBottom];
     }
 
     if (left && left != 0) {
-      this.properties[paddingLeft] = left;
+      this.properties[paddingLeft] = px(left);
     } else {
       delete this.properties[paddingLeft];
     }
