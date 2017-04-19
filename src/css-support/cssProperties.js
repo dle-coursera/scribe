@@ -77,3 +77,24 @@ export const colorsAndBackground = {
   borderImageRepeat: 'border-image-repeat',
   boxShadow: 'box-shadow',
 }
+
+export const textAndFont = {
+  font: 'font',
+  fontFamily: 'font-family',
+  fontSize: 'font-size',
+  fontWeight: 'font-weight',
+  fontStyle: 'font-style',
+  fontVariant: 'font-variant',
+  fontStretch: 'font-stretch',
+  fontSizeAdjust: 'font-size-adjust',
+  fontSynthesis: 'font-synthesis',
+  lineHeight: 'line-height',
+  letterSpacing: 'letter-spacing',
+  wordSpacing: 'word-spacing',
+  textAlign: 'text-align',
+  textDecoration: 'text-decoration',
+  textIndent: 'text-indent',
+  textTransform: 'text-transform',
+  verticalAlign: 'vertical-align',
+  whiteSpace: 'white-space',
+}

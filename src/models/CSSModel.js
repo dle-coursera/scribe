@@ -35,6 +35,11 @@ export default class CSSModel {
     `;
   }
 
+  // The styles should be retrieved from fontSupport.cssFontStylesForFont
+  set fontStyles(styles: any) {
+    this.properties = Object.assign({}, this.properties, styles);
+  }
+
   set color(value: NSColor) {
     const { color } = colorsAndBackground;
     this.properties[color] = hexColorForNSColor(value);

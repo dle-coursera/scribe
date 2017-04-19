@@ -3,6 +3,7 @@ import CSSModel from '../models/CSSModel';
 import HTMLModel from '../models/HTMLModel';
 import ComponentModel from '../models/ComponentModel';
 import { tags } from '../html-support/tags';
+import { cssFontStylesForFont } from '../css-support/fontSupport';
 
 import { opacityForNSColor } from '../layer-support/color';
 
@@ -29,6 +30,8 @@ export function processTextLayer(textLayer: MSTextLayer): ComponentModel {
   const colorValue: NSColor = fontAttributes['NSColor'];
   const font: NSFont = fontAttributes['NSFont'];
 
+  const fontStyles = cssFontStylesForFont(font);
+
   const size: Size = {
     width: frame.size.width,
     height: frame.size.height,
@@ -38,16 +41,12 @@ export function processTextLayer(textLayer: MSTextLayer): ComponentModel {
   cssModel.color = colorValue;
   cssModel.opacity = opacityForNSColor(colorValue);
   cssModel.size = size;
+  cssModel.fontStyles = fontStyles;
 
   const component = new ComponentModel(cssModel);
   component.htmlModel = new HTMLModel(tags.p, [name], contentString);
 
   return component;
-
-  // Typeface: Helvetica
-  // Weight : Regular | Oblique | Lite | Lite Oblique | Bold | Bold Oblique
-  // Size
-  // Alignment: Left | Center | Right | Full Adjusted
 }
 
 export function processBitmapLayer(bitmapLayer: MSBitmapLayer) {
