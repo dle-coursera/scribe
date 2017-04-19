@@ -1,8 +1,14 @@
 import React from 'react';
+import {PrismCode} from 'react-prism';
+import cssbeautify from 'cssbeautify';
+import {js_beautify as jsbeautify} from 'js-beautify';
 import {components, rawJS, rawCSS} from './components/mapping';
 import './wrapper.styl';
 
 const list = Object.keys(components);
+const jsbeautifyOptions = {
+  e4x: true
+};
 
 class Wrapper extends React.Component {
   constructor() {
@@ -32,10 +38,14 @@ class Wrapper extends React.Component {
       <div key={key} className="component cell">
         <div className="section">
           <h2 className="section-title">JSX</h2>
-          <pre>{rawJs}</pre>
+          <pre>
+            <PrismCode className="language-javascript">{jsbeautify(rawJs, jsbeautifyOptions)}</PrismCode>
+          </pre>
           <div className="sub-section">
             <h2 className="section-title">CSS</h2>
-            <pre>{rawCss}</pre>
+            <pre>
+              <PrismCode className="language-css">{cssbeautify(rawCss)}</PrismCode>
+            </pre>
           </div>
         </div>
         <div className="section">
