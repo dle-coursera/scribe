@@ -92,7 +92,7 @@ export default class ComponentModel {
 
      // Wrap content in a div if there is more than one child
      if (this._children.length > 1) {
-       let htmlModel = new HTMLModel(tags.div, [], childContent);
+       let htmlModel = new HTMLModel(tags.div, [this._name], childContent);
        childContent = htmlModel.generate();
      }
 
