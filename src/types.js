@@ -42,3 +42,11 @@ export type MSPolygonShape = any;
 export type MSTriangleShape = any;
 
 export type MSShapePathLayer = any;
+
+export type MSStyle = any;
+
+export type MSStyleFill = any;
+
+export type MSStyleBorder = any;
+
+export type MSColor = any;

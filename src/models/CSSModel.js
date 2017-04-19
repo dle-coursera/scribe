@@ -55,9 +55,22 @@ export default class CSSModel {
     }
   }
 
-  set backgroundColor(value: NSColor) {
+  // Takes in a hex string
+  set backgroundColor(value: string) {
     const { backgroundColor } = colorsAndBackground;
-    this.properties[backgroundColor] = hexColorForNSColor(value);
+    this.properties[backgroundColor] = value;
+  }
+
+  // Takes in a hex string
+  set borderColor(value: string) {
+    const { borderColor } = boxModel;
+    this.properties[borderColor] = value;
+  }
+
+  // Ex. 15px
+  set borderWidth(string: string) {
+    const { borderWidth } = boxModel;
+    this.properties[borderWidth] = value;
   }
 
   set size(size: Size) {
