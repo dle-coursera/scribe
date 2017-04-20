@@ -26,7 +26,20 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
   let parentComponent = new ComponentModel(cssModel);
   parentComponent.name = name;
 
-  const layerEnumerator = layers.objectEnumerator();
+  const sortedLayers = layers.sort((first, second) => {
+    const firstFrame = first.rect();
+    const secondFrame = second.rect();
+
+    const yDiff = firstFrame.origin.y - secondFrame.origin.y;
+
+    if (yDiff === 0) {
+      return firstFrame.origin.x - secondFrame.origin.x;
+    } else {
+      return yDiff;
+    }
+  });
+
+  const layerEnumerator = sortedLayers.objectEnumerator();
 
   while (layer = layerEnumerator.nextObject()) {
     let component: Component;
