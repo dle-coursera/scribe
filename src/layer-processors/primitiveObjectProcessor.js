@@ -51,8 +51,15 @@ export function processTextLayer(textLayer: MSTextLayer): ComponentModel {
 
 export function processBitmapLayer(bitmapLayer: MSBitmapLayer): ComponentModel {
   const name = `${bitmapLayer.name()}_${new Date().getTime()}`;
+  const frame: CGRect = bitmapLayer.rect();
+
+  const size: Size = {
+    width: frame.size.width,
+    height: frame.size.height,
+  }
 
   const cssModel = new CSSModel([name]);
+  cssModel.size = size;
 
   const component = new ComponentModel(cssModel);
   component.htmlModel = new HTMLModel(tags.img, [name]);
