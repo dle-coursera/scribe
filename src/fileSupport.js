@@ -1,22 +1,40 @@
+import {
+  MSImageData,
+} from './types';
+
 export const getOutputDirectoryPath = (folderName) => {
   return `~/Desktop/${folderName}`
 }
 
-export const saveTextToFile = (filename, text) => {
+export const createDirectoryIfNotExists = (path: string) => {
   const fileManager = NSFileManager.defaultManager();
-  const contents = NSString.stringWithString(text);
-  const path = NSString.stringWithString(filename).stringByExpandingTildeInPath();
   const dir = path.substring(0, path.lastIndexOf('/'));
-  
+
   if (!fileManager.fileExistsAtPath(dir)) {
     fileManager.createDirectoryAtPath_withIntermediateDirectories_attributes_error_(
       dir, true, null, null
     );
   }
+}
+
+export const saveTextToFile = (filename: string, text: string) => {
+  const contents = NSString.stringWithString(text);
+  const path = NSString.stringWithString(filename).stringByExpandingTildeInPath();
+  createDirectoryIfNotExists(path);
 
   const isSaved = contents.writeToFile_atomically_(path, true);
   if (!isSaved) {
-    console.error('File failed to save');
+    console.error('Text file failed to save');
+  }
+}
+
+export const saveImageToFile = (filename: string, image: MSImageData) => {
+  const path = NSString.stringWithString(filename).stringByExpandingTildeInPath();
+  createDirectoryIfNotExists(path);
+
+  const isSaved = image.data().writeToFile_atomically_(path, true);
+  if (!isSaved) {
+    console.error('Image file failed to save');
   }
 }
 

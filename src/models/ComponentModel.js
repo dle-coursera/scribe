@@ -1,14 +1,16 @@
 // @flow
 import CSSModel from './CSSModel';
 import HTMLModel from './HTMLModel';
+import {MSImageData} from '../types';
 import { tags } from '../html-support/tags';
 import { globalIncludesMap } from '../fileSupport';
-import { saveTextToFile } from '../fileSupport';
+import { saveImageToFile, saveTextToFile } from '../fileSupport';
 
 export default class ComponentModel {
    constructor(cssModel: CSSModel) {
      this._cssModel = cssModel;
      this._children = [];
+     this._assets = [];
    }
 
    set name(name: string) {
@@ -37,6 +39,10 @@ export default class ComponentModel {
 
    addChild(component: ComponentModel) {
      this._children.push(component);
+   }
+
+   addAsset(asset: any) {
+     this._assets.push(asset);
    }
 
    reactTemplate(name: string, content: string, cssPath: string, additionalFilePaths: Array<string>): string {
@@ -73,6 +79,7 @@ export default class ComponentModel {
 
    generate(fromParent: bool = false): string {
      if (this._htmlModel) {
+        this.checkAssets();
         return this._htmlModel.generate();
      }
 
@@ -128,6 +135,19 @@ export default class ComponentModel {
      }
 
      globalIncludesMap[this._name] = `${relativeDirPath}/${this._name}`;
+   }
+
+   checkAssets() {
+     if (this._assets.length) {
+       const filename = new Date().getTime();
+       this._htmlModel.attributes.src = `${globalIncludesMap.serverAssetDirectory}/${filename}.png`;
+       this._assets.forEach(asset => this.saveAsset(asset, filename));
+     }
+   }
+
+   saveAsset(content: MSImageData, filename: string) {
+    const {assetDirectory} = globalIncludesMap;
+    saveImageToFile(`${assetDirectory}/${filename}.png`, content);
    }
 
    saveCSS(content: string) {

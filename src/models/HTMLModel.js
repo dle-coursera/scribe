@@ -1,4 +1,5 @@
 // @flow
+import { htmlAttributes } from '../html-support/htmlAttributes';
 import { Tag } from '../types';
 
 export default class HTMLModel {
@@ -6,39 +7,35 @@ export default class HTMLModel {
     this.tag = tag;
     this.content = content;
     this.classes = classes;
+    this.attributes = {};
   }
 
-  reactTemplate(tag: Tag, classes: Array<string>, content?: string): string {
-    if (classes.length > 0) {
-      if (content) {
-        return `
-          <${tag} className="${classes}">
-            ${content}
-          </${tag}>
-        `;
-      } else {
-        return `
-          <${tag} className="${classes}">
-          </${tag}>
-        `;
-      }
+  set src(value: string) {
+    const {src} = htmlAttributes;
+    this.attributes[src] = value;
+  }
+
+  reactTemplate(tag: Tag, classes: Array<string>, content?: string, attributes: any): string {
+    const classNames = (classes.length > 0) ? ` className="${classes}"` : '';
+    const attributeKeys = Object.keys(attributes);
+    const attributeNames = (attributeKeys.length > 0) ?
+      ' ' + attributeKeys.map(key => `${key}="${attributes[key]}"`).join(' ') : '';
+
+    if (content) {
+      return `
+        <${tag}${classNames}${attributeNames}>
+          ${content}
+        </${tag}>
+      `;
     } else {
-      if (content) {
-        return `
-          <${tag}>
-            ${content}
-          </${tag}>
-        `;
-      } else {
-        return `
-          <${tag}>
-          </${tag}>
-        `;
-      }
+      return `
+        <${tag}${classNames}${attributeNames}>
+        </${tag}>
+      `;
     }
   }
 
   generate(): string {
-    return this.reactTemplate(this.tag, this.classes, this.content);
+    return this.reactTemplate(this.tag, this.classes, this.content, this.attributes);
   }
 }

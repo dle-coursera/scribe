@@ -49,6 +49,14 @@ export function processTextLayer(textLayer: MSTextLayer): ComponentModel {
   return component;
 }
 
-export function processBitmapLayer(bitmapLayer: MSBitmapLayer) {
-  console.log("This is a MSBitmapLayer");
+export function processBitmapLayer(bitmapLayer: MSBitmapLayer): ComponentModel {
+  const name = `${bitmapLayer.name()}_${new Date().getTime()}`;
+
+  const cssModel = new CSSModel([name]);
+
+  const component = new ComponentModel(cssModel);
+  component.htmlModel = new HTMLModel(tags.img, [name]);
+  component.addAsset(bitmapLayer.image());
+
+  return component;
 }

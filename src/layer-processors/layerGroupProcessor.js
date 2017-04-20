@@ -41,7 +41,7 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
     } else if (layer.isKindOfClass(MSTextLayer)) {
       component = processTextLayer(layer);
     } else if (layer.isKindOfClass(MSBitmapLayer)) {
-      processBitmapLayer(layer);
+      component = processBitmapLayer(layer);
     }
 
     if (component) {

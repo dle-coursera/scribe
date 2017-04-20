@@ -31,6 +31,8 @@ export type MSTextLayer = any;
 
 export type MSBitmapLayer = any;
 
+export type MSImageLayer = any;
+
 export type MSRectangleShape = any;
 
 export type MSOvalShape = any;
