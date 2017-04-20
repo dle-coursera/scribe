@@ -35,6 +35,12 @@ export default class CSSModel {
     `;
   }
 
+  // value can be obtained from cssPropertyValues.displayValues
+  set display(value: string) {
+    const { display } = visualFormatting;
+    this.properties[display] = value;
+  }
+
   // value can be obtained from cssPropertyValues.positionValues
   set position(value: string) {
     const { position } = visualFormatting;

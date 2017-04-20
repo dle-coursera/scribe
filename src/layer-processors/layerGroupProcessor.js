@@ -3,6 +3,7 @@ import CSSModel from '../models/CSSModel';
 import ComponentModel from '../models/ComponentModel';
 import {processShapeLayer} from './shapeLayerProcessor';
 import {processTextLayer, processBitmapLayer} from './primitiveObjectProcessor';
+import { displayValues } from '../css-support/cssPropertyValues';
 
 import {
   CGRect,
@@ -26,6 +27,8 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
   let parentComponent = new ComponentModel(cssModel);
   parentComponent.name = name;
 
+  let isHorizontalLayout: boolean = false;
+
   const sortedLayers = layers.sort((first, second) => {
     const firstFrame = first.rect();
     const secondFrame = second.rect();
@@ -33,11 +36,16 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
     const yDiff = firstFrame.origin.y - secondFrame.origin.y;
 
     if (yDiff === 0) {
+      isHorizontalLayout = true;
       return firstFrame.origin.x - secondFrame.origin.x;
     } else {
       return yDiff;
     }
   });
+
+  if (isHorizontalLayout) {
+    parentComponent.cssModel.display = displayValues.flex;
+  }
 
   const layerEnumerator = sortedLayers.objectEnumerator();
 
