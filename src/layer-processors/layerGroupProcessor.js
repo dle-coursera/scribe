@@ -49,11 +49,33 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
 
   const layerEnumerator = sortedLayers.objectEnumerator();
 
+  let lastLayer: any;
   while (layer = layerEnumerator.nextObject()) {
     let component: Component;
 
     // Padding computation needs to be here, because recursivly calling this function somehow sets to currently layer to null
-    const padding = paddingForLayer(layer.rect(), frame);
+    let padding: Padding;
+    if (lastLayer) {
+      const layerFrame = layer.rect();
+      const lastLayerFrame = lastLayer.rect();
+
+      if (isHorizontalLayout) {
+        padding = {
+          left: layerFrame.origin.x - (lastLayerFrame.origin.x + lastLayerFrame.size.width),
+        }
+      } else {
+        padding = {
+          top: layerFrame.origin.y - (lastLayerFrame.origin.y + lastLayerFrame.size.height),
+        }
+      }
+    } else {
+      padding = {
+        top: layer.rect().origin.y,
+        left: layer.rect().origin.x,
+      }
+    }
+
+    lastLayer = layer;
 
     if (layer.isKindOfClass(MSShapeGroup)) {
       component = processShapeLayer(layer);
@@ -72,15 +94,4 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
   }
 
   return parentComponent;
-}
-
-function paddingForLayer(layerFrame: CGRect, containerFrame: CGRect): Padding {
-  const padding: Padding = {
-    top: layerFrame.origin.y,
-    right: containerFrame.size.width - (layerFrame.origin.x + layerFrame.size.width),
-    bottom: containerFrame.size.height - (layerFrame.origin.y + layerFrame.size.height),
-    left: layerFrame.origin.x
-  }
-
-  return padding
 }
