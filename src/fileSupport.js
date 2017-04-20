@@ -2,8 +2,14 @@ import {
   MSImageData,
 } from './types';
 
+let contextDocument;
+
 export const getOutputDirectoryPath = (folderName) => {
   return `~/Desktop/${folderName}`
+}
+
+export const setContextDocument = (doc: any) => {
+  contextDocument = doc;
 }
 
 export const createDirectoryIfNotExists = (path: string) => {
@@ -15,6 +21,15 @@ export const createDirectoryIfNotExists = (path: string) => {
       dir, true, null, null
     );
   }
+}
+
+export const saveSvgToFile = (filename: string, layer: any) => {
+  var exportOption = layer.exportOptions().addExportFormat();
+  exportOption.setScale(1);
+  const rect = layer.absoluteRect().rect();
+  var exportReq = MSExportRequest.exportRequestFromExportFormat_layer_inRect_useIDForName_(exportOption, layer, rect, null);
+  contextDocument.saveArtboardOrSlice_toFile_(exportReq, filename);
+
 }
 
 export const saveTextToFile = (filename: string, text: string) => {
