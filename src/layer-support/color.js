@@ -26,9 +26,10 @@ export function opacityForMSColor(color: MSColor): number {
 }
 
 function hexColorForRGB(red: number, green: number, blue: number) {
-  const redHex = ("0" + red.toString(16)).toUpperCase().slice(-2);
-  const greenHex = ("0" + green.toString(16)).toUpperCase().slice(-2);
-  const blueHex = ("0" + blue.toString(16)).toUpperCase().slice(-2);
+  const hexMax = 255;
+  const redHex = (red * hexMax).toString(16).toUpperCase().slice(0, 2);
+  const greenHex = (green * hexMax).toString(16).toUpperCase().slice(0, 2);
+  const blueHex = (blue * hexMax).toString(16).toUpperCase().slice(0, 2);
 
   return '#' + redHex + greenHex + blueHex;
 }
