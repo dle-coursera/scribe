@@ -23,7 +23,7 @@ export function processLayerGroup(layerGroup: MSLayerGroup, isRootLayer: boolean
   if (name.includes(fileFormats.svg)) {
     return processSvgLayerGroup(layerGroup);
   } else if (name.startsWith(SCType.SCBackground)) {
-    return processBackgroundLayerGroup(layerGroup);
+    // Don't render the layer - it's already added to parent layer
   } else if (name.startsWith(SCType.SCList)) {
     return processListLayerGroup(layerGroup);
   } else {
@@ -31,42 +31,20 @@ export function processLayerGroup(layerGroup: MSLayerGroup, isRootLayer: boolean
   }
 }
 
-function processBackgroundLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
-  const layers: Array<any> = layerGroup.layers();
-  const name: string = sanitizeGroupName(layerGroup.name());
-  const frame: CGRect = layerGroup.rect();
-
-  const size: Size = {
-    width: 100,
-    height: 100,
-    isPercent: true,
-  }
-
-  let cssModel = new CSSModel([name]);
-  cssModel.size = size;
-
-  const parentComponent = new ComponentModel(cssModel);
-  parentComponent.name = name;
-
-  cssModel = new CSSModel([name]);
-  cssModel.size = size;
-  const component = new ComponentModel(cssModel);
-  component.htmlModel = new HTMLModel(tags.div, [name]);
-  parentComponent.addChild(component);
-
-  const layerEnumerator = layers.objectEnumerator();
+function addBackgroundToComponent(component: ComponentModel, layerGroup: MSLayerGroup): void {
+  const layerEnumerator = layerGroup.layers().objectEnumerator();
   while (layer = layerEnumerator.nextObject()) {
     const childName = layer.name();
     if (layer.isKindOfClass(MSBitmapLayer)) {
-      component.addAsset(layer.image());
-      cssModel.position = positionValues.absolute;
-      cssModel.zIndex = -1;
+      const filename = new Date().getTime();
+      component.cssModel.background = `url('${globalIncludesMap.serverAssetDirectory}/${filename}.png')`;
+      component.hasBackground = true;
+      component.saveAsset(layer.image(), filename);
     } else if (layer.isKindOfClass(MSShapeGroup)) {
-      parentComponent.cssModel.backgroundColor = hexColorForMSColor(layer.style().fills()[0].colorGeneric());
+      component.cssModel.backgroundColor = hexColorForMSColor(layer.style().fills()[0].colorGeneric());
+      component.hasBackground = true;
     }
   }
-
-  return parentComponent;
 }
 
 /*
@@ -147,11 +125,15 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup, isRootLayer: boolean)
   const sortedLayers = sortLayers(layers);
   const layerEnumerator = sortedLayers.objectEnumerator();
 
+  const backgroundLayer: ?any = sortedLayers.find(layer => layer.name().startsWith(SCType.SCBackground));
+  if (backgroundLayer) {
+    addBackgroundToComponent(parentComponent, backgroundLayer);
+  }
+
   let lastLayer: any;
-  let hasBackgroundLayer: boolean = false;
   while (layer = layerEnumerator.nextObject()) {
     // Any layer with name that starts with an underscore is ignored
-    if (layer.name().startsWith('__')) {
+    if (layer.name().startsWith('__') || layer.name().startsWith(SCType.SCBackground)) {
       continue;
     }
 
@@ -172,11 +154,6 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup, isRootLayer: boolean)
         margin = {
           left: layerFrame.origin.x - (lastLayerFrame.origin.x + lastLayerFrame.size.width),
         }
-      } else if (lastLayer.name().startsWith(SCType.SCBackground)) {
-        hasBackgroundLayer = true;
-        margin = {
-          top: layerFrame.origin.y - lastLayerFrame.origin.y,
-        }
       } else {
         margin = {
           top: layerFrame.origin.y - (lastLayerFrame.origin.y + lastLayerFrame.size.height),
@@ -192,13 +169,9 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup, isRootLayer: boolean)
     // When enumerating over the direct child layers of the root layer,
     // add the left margin, since they won't necessarily be part of a linear layout
     // Also do the same when there's an absolute positioned background layer
-    if (isRootLayer || hasBackgroundLayer) {
+    if (isRootLayer) {
       margin.left = layer.rect().origin.x;
     };
-
-    if (hasBackgroundLayer) {
-      parentComponent.cssModel.position = positionValues.relative;
-    }
 
     lastLayer = layer;
 
@@ -213,7 +186,11 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup, isRootLayer: boolean)
     }
 
     if (component) {
-      component.cssModel.margin = margin;
+      if (backgroundLayer) {
+        component.cssModel.padding = margin;
+      } else {
+        component.cssModel.margin = margin;
+      }
       parentComponent.addChild(component);
     }
   }

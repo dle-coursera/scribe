@@ -15,6 +15,7 @@ export default class ComponentModel {
      this._children = [];
      this._assets = [];
      this._isHorizontalLayout = false;
+     this._hasBackground = false;
    }
 
    set isHorizontalLayout(value: boolean) {
@@ -23,6 +24,10 @@ export default class ComponentModel {
 
    get isHorizontalLayout() {
      return this._isHorizontalLayout;
+   }
+
+   set hasBackground(value: boolean) {
+     this._hasBackground = value;
    }
 
    set frame(value: CGRect) {
@@ -147,7 +152,7 @@ export default class ComponentModel {
 
        this._htmlModel.htmlContent = reactChildContent;
        reactChildContent = this._htmlModel.generate();
-     } else if (this._children.length > 1) { // Wrap content in a div if there is more than one child
+     } else if (this._children.length > 1 || this._hasBackground) { // Wrap content in a div if there is more than one child
        let htmlModel = new HTMLModel(tags.div, [this._name], reactChildContent);
        reactChildContent = htmlModel.generate();
      }
