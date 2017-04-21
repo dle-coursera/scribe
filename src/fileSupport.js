@@ -2,8 +2,14 @@ import {
   MSImageData,
 } from './types';
 
+let contextDocument;
+
 export const getOutputDirectoryPath = (folderName) => {
   return `~/Desktop/${folderName}`
+}
+
+export const setContextDocument = (doc: any) => {
+  contextDocument = doc;
 }
 
 export const createDirectoryIfNotExists = (path: string) => {
@@ -15,6 +21,14 @@ export const createDirectoryIfNotExists = (path: string) => {
       dir, true, null, null
     );
   }
+}
+
+export const saveSvgToFile = (filename: string, layer: any) => {
+  var exportOption = layer.exportOptions().addExportFormat();
+  exportOption.setScale(1);
+  const rect = layer.absoluteRect().rect();
+  var exportReq = MSExportRequest.exportRequestFromExportFormat_layer_inRect_useIDForName_(exportOption, layer, rect, null);
+  contextDocument.saveArtboardOrSlice_toFile_(exportReq, filename);
 }
 
 export const saveTextToFile = (filename: string, text: string) => {
@@ -43,7 +57,7 @@ export const getDirectoryContents = (path, onlyIsDirectory) => {
   const fullPath = NSString.stringWithString(path).stringByExpandingTildeInPath();
   const contents = fileManager.contentsOfDirectoryAtPath_error_(fullPath, null);
   const contentsArray = [];
-  
+
   for (let i = 0; i < contents.length; i++) {
     if (!onlyIsDirectory || fileManager.fileExistsAtPath(`${fullPath}/${contents[i]}/index.js`)) {
       contentsArray.push(contents[i]);
@@ -74,7 +88,7 @@ export const createMappingFile = () => {
     ${allExports}
     export default components;
   `;
-  
+
   saveTextToFile(`${globalIncludesMap.projectDirectory}/index.js`, exportString);
 
   const rootDirectoryContents = getDirectoryContents(rootDirectory, true);

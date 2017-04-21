@@ -6,6 +6,7 @@ import { processShapeLayer } from './shapeLayerProcessor';
 import { processTextLayer, processBitmapLayer } from './primitiveObjectProcessor';
 import { displayValues } from '../css-support/cssPropertyValues';
 import { tags } from '../html-support/tags';
+import { saveSvgToFile, globalIncludesMap } from '../fileSupport';
 
 import {
   CGRect,
@@ -36,6 +37,10 @@ function processListLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
   const size: Size = {
     width: frame.size.width,
     height: frame.size.height,
+  }
+
+  if (name.includes('.svg')) {
+    return processSVG(layerGroup, size);
   }
 
   let cssModel = new CSSModel([name]);
@@ -141,6 +146,27 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
       parentComponent.addChild(component);
     }
   }
+
+  return parentComponent;
+}
+
+function processSVG(layerGroup, size) {
+  const name = layerGroup.name();
+  const sanitizedName = name.replace('.svg', 'SVG');
+
+  saveSvgToFile(`${globalIncludesMap.assetDirectory}/${name}`, layerGroup);
+
+  const cssModel = new CSSModel([sanitizedName]);
+  cssModel.size = size;
+
+  const parentComponent = new ComponentModel(cssModel);
+  parentComponent.name = sanitizedName;
+
+  const component = new ComponentModel(cssModel);
+  component.htmlModel = new HTMLModel(tags.img, [sanitizedName]);
+  component.htmlModel.src = `${globalIncludesMap.serverAssetDirectory}/${name}`;
+
+  parentComponent.addChild(component);
 
   return parentComponent;
 }

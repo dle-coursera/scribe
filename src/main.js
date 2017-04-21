@@ -1,11 +1,12 @@
 import { processArtboards } from './layer-processors/artboardProcessor';
-import { globalIncludesMap } from './fileSupport';
+import { globalIncludesMap, setContextDocument } from './fileSupport';
 import { projectRoot } from '../config';
 
 export default function (context) {
   context.document.showMessage('It\'s alive 333 🙌')
   const documentName = context.document.displayName();
   setupProjectDirectory(documentName);
+  setContextDocument(context.document);
 
   const document = context.document;
   const pages = document.pages();
