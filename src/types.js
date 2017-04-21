@@ -18,6 +18,7 @@ export type Margin = {
 export type Size = {
   width: number,
   height: number,
+  isPercent?: boolean,
 }
 
 // These are Scribe specific types

@@ -7,6 +7,7 @@ import { processTextLayer, processBitmapLayer } from './primitiveObjectProcessor
 import { displayValues, justifyContentValues, alignItemsValues, positionValues } from '../css-support/cssPropertyValues';
 import { tags } from '../html-support/tags';
 import { saveSvgToFile, globalIncludesMap, fileFormats } from '../fileSupport';
+import { hexColorForMSColor } from '../layer-support/color';
 
 import {
   CGRect,
@@ -36,8 +37,9 @@ function processBackgroundLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
   const frame: CGRect = layerGroup.rect();
 
   const size: Size = {
-    width: frame.size.width,
-    height: frame.size.height,
+    width: 100,
+    height: 100,
+    isPercent: true,
   }
 
   let cssModel = new CSSModel([name]);
@@ -48,8 +50,6 @@ function processBackgroundLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
 
   cssModel = new CSSModel([name]);
   cssModel.size = size;
-  cssModel.position = positionValues.absolute;
-  cssModel.zIndex = -1;
   const component = new ComponentModel(cssModel);
   component.htmlModel = new HTMLModel(tags.div, [name]);
   parentComponent.addChild(component);
@@ -59,6 +59,10 @@ function processBackgroundLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
     const childName = layer.name();
     if (layer.isKindOfClass(MSBitmapLayer)) {
       component.addAsset(layer.image());
+      cssModel.position = positionValues.absolute;
+      cssModel.zIndex = -1;
+    } else if (layer.isKindOfClass(MSShapeGroup)) {
+      parentComponent.cssModel.backgroundColor = hexColorForMSColor(layer.style().fills()[0].colorGeneric());
     }
   }
 
@@ -144,6 +148,7 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup, isRootLayer: boolean)
   const layerEnumerator = sortedLayers.objectEnumerator();
 
   let lastLayer: any;
+  let hasBackgroundLayer: boolean = false;
   while (layer = layerEnumerator.nextObject()) {
     let component: Component;
 
@@ -163,6 +168,7 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup, isRootLayer: boolean)
           left: layerFrame.origin.x - (lastLayerFrame.origin.x + lastLayerFrame.size.width),
         }
       } else if (lastLayer.name().startsWith(SCType.SCBackground)) {
+        hasBackgroundLayer = true;
         margin = {
           top: layerFrame.origin.y - lastLayerFrame.origin.y,
         }
@@ -179,10 +185,15 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup, isRootLayer: boolean)
     }
 
     // When enumerating over the direct child layers of the root layer,
-    // also add the left margin, since they won't necessarily be part of a linear layout
-    if (isRootLayer) {
+    // add the left margin, since they won't necessarily be part of a linear layout
+    // Also do the same when there's an absolute positioned background layer
+    if (isRootLayer || hasBackgroundLayer) {
       margin.left = layer.rect().origin.x;
     };
+
+    if (hasBackgroundLayer) {
+      parentComponent.cssModel.position = positionValues.relative;
+    }
 
     lastLayer = layer;
 

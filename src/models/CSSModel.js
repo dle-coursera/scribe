@@ -2,7 +2,7 @@
 import { boxModel, visualFormatting, colorsAndBackground, flexbox } from '../css-support/cssProperties';
 import { hexColorForNSColor, alphaForNSColor } from '../layer-support/color';
 import { Padding, Size, Margin } from '../types';
-import { px } from '../css-support/units';
+import { px, percent } from '../css-support/units';
 
 export default class CSSModel {
   /*
@@ -112,6 +112,16 @@ export default class CSSModel {
     this.properties[borderStyle] = value;
   }
 
+  set borderTop(value: string) {
+    const { borderTop } = boxModel;
+    this.properties[borderTop] = value;
+  }
+
+  set borderBottom(value: string) {
+    const { borderBottom } = boxModel;
+    this.properties[borderBottom] = value;
+  }
+
   set size(size: Size) {
     const widthValue = size.width;
     const heightValue = size.height;
@@ -119,13 +129,13 @@ export default class CSSModel {
     const { width, height} = visualFormatting;
 
     if (widthValue && widthValue != 0) {
-      this.properties[width] = px(widthValue);
+      this.properties[width] = size.isPercent ? percent(widthValue) : px(widthValue);
     } else {
       delete this.properties[width];
     }
 
     if (heightValue && heightValue != 0) {
-      this.properties[height] = px(heightValue);
+      this.properties[height] = size.isPercent ? percent(heightValue) : px(heightValue);
     } else {
       delete this.properties[height];
     }
