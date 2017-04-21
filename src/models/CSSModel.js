@@ -18,7 +18,7 @@ export default class CSSModel {
   getTemplate(selectors: Array<string>, properties: any): string {
     const annotatedSelectors = selectors
       .map(selector => '.' + selector)
-      .reduce((first, second) => first + ', ' + second);
+      .reduce((first, second) => first + ', ' + second, '');
 
     let combinedProperties = [];
     for (var key in properties) {
@@ -26,7 +26,7 @@ export default class CSSModel {
       combinedProperties.push(`${key}: ${value};`);
     }
 
-    const propertyString = combinedProperties.reduce((first, second) => first + second);
+    const propertyString = combinedProperties.reduce((first, second) => first + second, '');
 
     return `
     ${annotatedSelectors} {
