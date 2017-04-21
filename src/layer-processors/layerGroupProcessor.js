@@ -150,6 +150,11 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup, isRootLayer: boolean)
   let lastLayer: any;
   let hasBackgroundLayer: boolean = false;
   while (layer = layerEnumerator.nextObject()) {
+    // Any layer with name that starts with an underscore is ignored
+    if (layer.name().startsWith('__')) {
+      continue;
+    }
+
     let component: Component;
 
     if (isHorizontal) {
@@ -263,7 +268,7 @@ function sortLayers(layers: Array<any>): Array<any> {
 }
 
 function frameToString(frame: CGRect): string {
-  return `x:${frame.origin.x} y:${frame.origin.y} w:${frame.size.width} h:${frame.size.height}`;
+  return `(x:${frame.origin.x} y:${frame.origin.y} w:${frame.size.width} h:${frame.size.height})`;
 }
 
 function isHorizontalLayout(layers: Array<any>): boolean {
