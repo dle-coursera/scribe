@@ -6,7 +6,7 @@ import { processShapeLayer } from './shapeLayerProcessor';
 import { processTextLayer, processBitmapLayer } from './primitiveObjectProcessor';
 import { displayValues } from '../css-support/cssPropertyValues';
 import { tags } from '../html-support/tags';
-import { saveSvgToFile, globalIncludesMap } from '../fileSupport';
+import { saveSvgToFile, globalIncludesMap, fileFormats } from '../fileSupport';
 
 import {
   CGRect,
@@ -19,7 +19,9 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
   const name: string = layerGroup.name();
   const frame: CGRect = layerGroup.rect();
 
-  if (name.startsWith(SCType.SCList)) {
+  if (name.includes(fileFormats.svg)) {
+    return processSvgLayerGroup(layerGroup);
+  } else if (name.startsWith(SCType.SCList)) {
     return processListLayerGroup(layerGroup);
   } else {
     return processNormalLayerGroup(layerGroup);
@@ -37,10 +39,6 @@ function processListLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
   const size: Size = {
     width: frame.size.width,
     height: frame.size.height,
-  }
-
-  if (name.includes('.svg')) {
-    return processSVG(layerGroup, size);
   }
 
   let cssModel = new CSSModel([name]);
@@ -150,9 +148,19 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
   return parentComponent;
 }
 
-function processSVG(layerGroup, size) {
-  const name = layerGroup.name();
-  const sanitizedName = name.replace('.svg', 'SVG');
+/*
+  This is used to process a SVG layer group.
+*/
+function processSvgLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
+  const layers: Array<any> = layerGroup.layers();
+  const name: string = sanitizeGroupName(layerGroup.name());
+  const frame: CGRect = layerGroup.rect();
+  const sanitizedName: string = name.replace(fileFormats.svg, 'SVG');
+
+  const size: Size = {
+    width: frame.size.width,
+    height: frame.size.height,
+  }
 
   saveSvgToFile(`${globalIncludesMap.assetDirectory}/${name}`, layerGroup);
 

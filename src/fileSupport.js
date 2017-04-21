@@ -99,6 +99,10 @@ export const createMappingFile = () => {
 
 }
 
+export const fileFormats = {
+  svg: '.svg',
+};
+
 // This is a map of all component names to their file paths on disk
 export const globalIncludesMap = {
 
