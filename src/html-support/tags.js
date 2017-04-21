@@ -1,6 +1,9 @@
+// Keep the list in alphabetical order
 export const tags = {
-  p : 'p',
-  br : 'br',
+  br: 'br',
   div: 'div',
   img: 'img',
+  li: 'li',
+  p: 'p',
+  ul: 'ul',
 }

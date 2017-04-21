@@ -44,6 +44,7 @@ export function processTextLayer(textLayer: MSTextLayer): ComponentModel {
   cssModel.fontStyles = fontStyles;
 
   const component = new ComponentModel(cssModel);
+  component.frame = frame;
   component.htmlModel = new HTMLModel(tags.p, [name], contentString);
 
   return component;
@@ -62,6 +63,7 @@ export function processBitmapLayer(bitmapLayer: MSBitmapLayer): ComponentModel {
   cssModel.size = size;
 
   const component = new ComponentModel(cssModel);
+  component.frame = frame;
   component.htmlModel = new HTMLModel(tags.img, [name]);
   component.addAsset(bitmapLayer.image());
 

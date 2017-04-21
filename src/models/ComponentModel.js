@@ -1,16 +1,27 @@
 // @flow
 import CSSModel from './CSSModel';
 import HTMLModel from './HTMLModel';
-import {MSImageData} from '../types';
+import { MSImageData, CGRect } from '../types';
 import { tags } from '../html-support/tags';
 import { globalIncludesMap } from '../fileSupport';
 import { saveImageToFile, saveTextToFile } from '../fileSupport';
+import { px } from '../css-support/units';
+import { colorTheme } from '../layer-support/color';
+import { borderStyleValues } from '../css-support/cssPropertyValues';
 
 export default class ComponentModel {
    constructor(cssModel: CSSModel) {
      this._cssModel = cssModel;
      this._children = [];
      this._assets = [];
+   }
+
+   set frame(value: CGRect) {
+     this._frame = value;
+   }
+
+   get frame(): CGRect {
+     return this._frame;
    }
 
    set name(name: string) {
@@ -78,9 +89,14 @@ export default class ComponentModel {
    }
 
    generate(fromParent: bool = false): string {
+     // Check if we should handle primitive tags. ul and li are treated differently here
+     let htmlModelTag: string;
      if (this._htmlModel) {
-        this.checkAssets();
-        return this._htmlModel.generate();
+       htmlModelTag = this._htmlModel.htmlTag;
+       if (htmlModelTag != tags.ul) {
+          this.checkAssets();
+          return this._htmlModel.generate();
+       }
      }
 
      // This needs to be called before child.generate
@@ -95,12 +111,32 @@ export default class ComponentModel {
          const childFilePath = globalIncludesMap[child.name];
          additionalFilePaths.push(childFilePath);
        }
-       reactChildContent += child.generate(true);
+
+       // If this is a list(ul), then all the child should be wrapped inside a list item(li)
+       if (htmlModelTag === tags.ul) {
+         let listItemModel = new HTMLModel(tags.li, [this.listItemName()], child.generate(true));
+         reactChildContent += listItemModel.generate();
+       } else {
+         reactChildContent += child.generate(true);
+       }
        cssContent += child.cssModel.generate();
      }
 
-     // Wrap content in a div if there is more than one child
-     if (this._children.length > 1) {
+     // Generate the list(ul)
+     if (this._htmlModel && (htmlModelTag === tags.ul)) {
+       // Create a border around each list item
+       const listItemCssModel = new CSSModel([this.listItemName()])
+       listItemCssModel.borderColor = colorTheme.black;
+       listItemCssModel.borderWidth = px(1);
+       listItemCssModel.borderStyle = borderStyleValues.solid;
+       listItemCssModel.size = {
+         height: this._frame.size.height / this._children.length,
+       }
+       cssContent += listItemCssModel.generate();
+
+       this._htmlModel.htmlContent = reactChildContent;
+       reactChildContent = this._htmlModel.generate();
+     } else if (this._children.length > 1) { // Wrap content in a div if there is more than one child
        let htmlModel = new HTMLModel(tags.div, [this._name], reactChildContent);
        reactChildContent = htmlModel.generate();
      }
@@ -117,11 +153,16 @@ export default class ComponentModel {
      this.saveCSS(cssContent);
      this.saveJSX(reactContent);
 
+     // If we are inside a parent component, then render just the component tag
      if (fromParent) {
        return this.childReactTemplate(this._name);
      } else {
        return reactContent;
      }
+   }
+
+   listItemName(): string {
+     return `${this._name}-item`;
    }
 
    registerComponentFilePaths() {

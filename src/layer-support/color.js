@@ -25,6 +25,10 @@ export function opacityForMSColor(color: MSColor): number {
   return color.alpha();
 }
 
+export const colorTheme = {
+  black: '#000000',
+}
+
 function hexColorForRGB(red: number, green: number, blue: number) {
   const hexMax = 255;
   const redHex = (red * hexMax).toString(16).toUpperCase().slice(0, 2);

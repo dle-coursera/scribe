@@ -13,6 +13,12 @@ export type Size = {
   height: number,
 }
 
+// These are Scribe specific types
+export const SCType = {
+  SCList: 'SCList',
+  SCRow: 'SCRow',
+}
+
 // Apple types
 export type NSColor = any;
 

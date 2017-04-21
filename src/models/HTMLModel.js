@@ -3,7 +3,7 @@ import { htmlAttributes } from '../html-support/htmlAttributes';
 import { Tag } from '../types';
 
 export default class HTMLModel {
-  constructor(tag: Tag, classes: Array<string>, content: string) {
+  constructor(tag: Tag, classes: Array<string>, content?: string) {
     this.tag = tag;
     this.content = content;
     this.classes = classes;
@@ -13,6 +13,18 @@ export default class HTMLModel {
   set src(value: string) {
     const {src} = htmlAttributes;
     this.attributes[src] = value;
+  }
+
+  get htmlTag(): string {
+    return this.tag;
+  }
+
+  set htmlContent(content: string) {
+    this.content = content;
+  }
+
+  get htmlContent(): string {
+    return this.content;
   }
 
   reactTemplate(tag: Tag, classes: Array<string>, content?: string, attributes: any): string {

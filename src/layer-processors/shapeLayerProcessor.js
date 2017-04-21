@@ -17,29 +17,29 @@ import {
 } from '../types';
 
 export function processShapeLayer(shapeLayer: MSShapeGroup): ComponentModel {
-  console.log("This is a shape layer");
   const layers = shapeLayer.layers()
   const layerEnumerator = layers.objectEnumerator();
 
   while (layer = layerEnumerator.nextObject()) {
     if (layer.isKindOfClass(MSRectangleShape)) { // A rectangle
-      return processRectangle(layer, shapeLayer);
+      // TODO:
     } else if (layer.isKindOfClass(MSOvalShape)) { // An oval
-      console.log("An oval");
+      // TODO:
     } else if (layer.isKindOfClass(MSStarShape)) {
-      console.log("A star");
+      // TODO:
     } else if (layer.isKindOfClass(MSPolygonShape)) {
-      console.log("A polygon");
+      // TODO:
     } else if (layer.isKindOfClass(MSTriangleShape)) {
-      console.log("A triangle");
+      // TODO:
     } else if (layer.isKindOfClass(MSShapePathLayer)) { // Can be a line or a line with arrow at the end
-      console.log("Line or line with arrow");
+      // TODO:
     }
   }
+
+  return null;
 }
 
 function processRectangle(rectangle: MSRectangleShape, shapeLayer: MSShapeGroup): ComponentModel {
-  console.log("A rectangle");
   const frame: CGRect = shapeLayer.rect();
   const name: string = shapeLayer.name();
 
@@ -69,6 +69,7 @@ function processRectangle(rectangle: MSRectangleShape, shapeLayer: MSShapeGroup)
   cssModel.zIndex = -1;
 
   const component = new ComponentModel(cssModel);
+  component.frame = frame;
   component.htmlModel = new HTMLModel(tags.div, [name]);
 
   return component;

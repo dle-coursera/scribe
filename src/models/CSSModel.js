@@ -90,6 +90,11 @@ export default class CSSModel {
     this.properties[borderWidth] = value;
   }
 
+  set borderStyle(value: string) {
+    const { borderStyle } = boxModel;
+    this.properties[borderStyle] = value;
+  }
+
   set size(size: Size) {
     const widthValue = size.width;
     const heightValue = size.height;
