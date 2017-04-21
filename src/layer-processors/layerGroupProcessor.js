@@ -249,25 +249,15 @@ function processSvgLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
 
 // Determine the order of layers based on a linear layout
 function sortLayers(layers: Array<any>): Array<any> {
+  let isHorizontal = isHorizontalLayout(layers);
+
   return layers.sort((layerA, layerB) => {
-    const frameA = layerA.rect();
-    const frameB = layerB.rect();
-
-    const centerAx = frameA.origin.x;
-    const centerAy = frameA.origin.y;
-
-    const centerBx = frameB.origin.x + frameB.size.width * 0.2;
-    const centerBy = frameB.origin.y + frameB.size.height * 0.2;
-
-    const xDiff = centerAx - centerBx;
-    const yDiff = centerBy - centerBy;
-
-    if (xDiff < 0 || yDiff < 0) {
-      return -1; // Layer A comes before layer B
-    } else if (xDiff > 0 || yDiff > 0) {
-      return 1; // Layer B comes before Layer A
+    let frameA = layerA.rect();
+    let frameB = layerB.rect();
+    if (isHorizontal) {
+      return (frameA.origin.x < frameB.origin.x) ? -1 : 1;
     } else {
-      return 0; // Order is not deterministic
+      return (frameA.origin.y < frameB.origin.y) ? -1 : 1;
     }
   });
 }
@@ -278,8 +268,15 @@ function frameToString(frame: CGRect): string {
 
 function isHorizontalLayout(layers: Array<any>): boolean {
   if (layers.length > 1) {
-    const frameA = layers[0].rect();
-    const frameB = layers[1].rect();
+    let frameA = layers[0].rect();
+    let frameB = layers[1].rect();
+
+    // Swap if frameA origin is greater than frameB origin
+    if (frameA.origin.x > frameB.origin.x) {
+      frameA = layers[1].rect();
+      frameB = layers[0].rect();
+    }
+
     // Check if the right edge of layer A is less than the left edge of layer B offset by 20% of the width
     return (frameA.origin.x + frameA.size.width) < (frameB.origin.x + frameB.size.width * 0.2);
   } else {
