@@ -32,15 +32,10 @@ export function processTextLayer(textLayer: MSTextLayer): ComponentModel {
 
   const fontStyles = cssFontStylesForFont(font);
 
-  const size: Size = {
-    width: frame.size.width,
-    height: frame.size.height,
-  }
-
+  // Note: Text should never have width and height defined in CSS. Make sure you have a good reason if you need it.
   const cssModel = new CSSModel([name])
   cssModel.color = colorValue;
   cssModel.opacity = opacityForNSColor(colorValue);
-  cssModel.size = size;
   cssModel.fontStyles = fontStyles;
 
   const component = new ComponentModel(cssModel);

@@ -1,7 +1,7 @@
 // @flow
 import { boxModel, visualFormatting, colorsAndBackground } from '../css-support/cssProperties';
 import { hexColorForNSColor, alphaForNSColor } from '../layer-support/color';
-import { Padding, Size } from '../types';
+import { Padding, Size, Margin } from '../types';
 import { px } from '../css-support/units';
 
 export default class CSSModel {
@@ -144,6 +144,39 @@ export default class CSSModel {
       this.properties[paddingLeft] = px(left);
     } else {
       delete this.properties[paddingLeft];
+    }
+  }
+
+  set margin(margin: Margin) {
+    const top = margin.top;
+    const right = margin.right;
+    const bottom = margin.bottom;
+    const left = margin.left;
+
+    const {marginTop, marginRight, marginBottom, marginLeft} = boxModel;
+
+    if (top && top != 0) {
+      this.properties[marginTop] = px(top);
+    } else {
+      delete this.properties[marginTop];
+    }
+
+    if (right && right != 0) {
+      this.properties[marginRight] = px(right);
+    } else {
+      delete this.properties[marginRight];
+    }
+
+    if (bottom && bottom != 0) {
+      this.properties[marginBottom] = px(bottom);
+    } else {
+      delete this.properties[marginBottom];
+    }
+
+    if (left && left != 0) {
+      this.properties[marginLeft] = px(left);
+    } else {
+      delete this.properties[marginLeft];
     }
   }
 

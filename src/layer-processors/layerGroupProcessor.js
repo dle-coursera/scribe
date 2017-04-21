@@ -10,7 +10,7 @@ import { saveSvgToFile, globalIncludesMap, fileFormats } from '../fileSupport';
 
 import {
   CGRect,
-  Padding,
+  Margin,
   SCType,
 } from '../types';
 
@@ -105,23 +105,23 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
       parentComponent.cssModel.display = displayValues.flex;
     }
 
-    // Padding computation needs to be here, because recursivly calling this function somehow sets to currently layer to null
-    let padding: Padding;
+    // Margin computation needs to be here, because recursivly calling this function somehow sets to currently layer to null
+    let margin: Margin;
     if (lastLayer) {
       const layerFrame = layer.rect();
       const lastLayerFrame = lastLayer.rect();
 
       if (isHorizontal) {
-        padding = {
+        margin = {
           left: layerFrame.origin.x - (lastLayerFrame.origin.x + lastLayerFrame.size.width),
         }
       } else {
-        padding = {
+        margin = {
           top: layerFrame.origin.y - (lastLayerFrame.origin.y + lastLayerFrame.size.height),
         }
       }
     } else {
-      padding = {
+      margin = {
         top: layer.rect().origin.y,
         left: layer.rect().origin.x,
       }
@@ -140,7 +140,7 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
     }
 
     if (component) {
-      component.cssModel.padding = padding;
+      component.cssModel.margin = margin;
       parentComponent.addChild(component);
     }
   }

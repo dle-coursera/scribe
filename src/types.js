@@ -8,6 +8,13 @@ export type Padding = {
   left: number,
 }
 
+export type Margin = {
+  top: number,
+  right: number,
+  bottom: number,
+  left: number,
+}
+
 export type Size = {
   width: number,
   height: number,
