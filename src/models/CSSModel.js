@@ -84,6 +84,11 @@ export default class CSSModel {
     }
   }
 
+  set background(value: string) {
+    const { background } = colorsAndBackground;
+    this.properties[background] = value;
+  }
+
   // Takes in a hex string
   set backgroundColor(value: string) {
     const { backgroundColor } = colorsAndBackground;

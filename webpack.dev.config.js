@@ -29,7 +29,7 @@ module.exports = {
       },
       {
         test: /\.(styl|css)$/,
-        loaders: ['style-loader', 'css-loader', 'stylus-loader']
+        loaders: ['style-loader', 'css-loader?url=false', 'stylus-loader']
       },
       {
         test: /\.txt$/,

@@ -192,7 +192,11 @@ export default class ComponentModel {
    checkAssets() {
      if (this._assets.length) {
        const filename = new Date().getTime();
-       this._htmlModel.attributes.src = `${globalIncludesMap.serverAssetDirectory}/${filename}.png`;
+       if (this._htmlModel.htmlTag === tags.img) {
+        this._htmlModel.attributes.src = `${globalIncludesMap.serverAssetDirectory}/${filename}.png`;
+       } else {
+        this._cssModel.background = `url('${globalIncludesMap.serverAssetDirectory}/${filename}.png')`;
+       }
        this._assets.forEach(asset => this.saveAsset(asset, filename));
      }
    }
