@@ -22,6 +22,7 @@ export type Size = {
 
 // These are Scribe specific types
 export const SCType = {
+  SCBackground: 'SCBackground',
   SCList: 'SCList',
   SCRow: 'SCRow',
 }

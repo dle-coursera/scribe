@@ -4,7 +4,7 @@ import HTMLModel from '../models/HTMLModel';
 import ComponentModel from '../models/ComponentModel';
 import { processShapeLayer } from './shapeLayerProcessor';
 import { processTextLayer, processBitmapLayer } from './primitiveObjectProcessor';
-import { displayValues, justifyContentValues, alignItemsValues } from '../css-support/cssPropertyValues';
+import { displayValues, justifyContentValues, alignItemsValues, positionValues } from '../css-support/cssPropertyValues';
 import { tags } from '../html-support/tags';
 import { saveSvgToFile, globalIncludesMap, fileFormats } from '../fileSupport';
 
@@ -21,11 +21,47 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
 
   if (name.includes(fileFormats.svg)) {
     return processSvgLayerGroup(layerGroup);
+  } else if (name.startsWith(SCType.SCBackground)) {
+    return processBackgroundLayerGroup(layerGroup);
   } else if (name.startsWith(SCType.SCList)) {
     return processListLayerGroup(layerGroup);
   } else {
     return processNormalLayerGroup(layerGroup);
   }
+}
+
+function processBackgroundLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
+  const layers: Array<any> = layerGroup.layers();
+  const name: string = sanitizeGroupName(layerGroup.name());
+  const frame: CGRect = layerGroup.rect();
+
+  const size: Size = {
+    width: frame.size.width,
+    height: frame.size.height,
+  }
+
+  let cssModel = new CSSModel([name]);
+  cssModel.size = size;
+
+  const parentComponent = new ComponentModel(cssModel);
+  parentComponent.name = name;
+
+  cssModel = new CSSModel([name]);
+  cssModel.size = size;
+  cssModel.position = positionValues.absolute;
+  const component = new ComponentModel(cssModel);
+  component.htmlModel = new HTMLModel(tags.div, [name]);
+  parentComponent.addChild(component);
+
+  const layerEnumerator = layers.objectEnumerator();
+  while (layer = layerEnumerator.nextObject()) {
+    const childName = layer.name();
+    if (layer.isKindOfClass(MSBitmapLayer)) {
+      component.addAsset(layer.image());
+    }
+  }
+
+  return parentComponent;
 }
 
 /*
