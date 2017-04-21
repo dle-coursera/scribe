@@ -102,9 +102,13 @@ const fontStyles = {
 }
 
 function pixelValueForFontPoints(pointValue: number): number {
-  const pixels = pointToValue[pointValue];
+  let pixels = pointToValue[pointValue];
+  // Some times pointValue is off by a tiny bit, which won't match the table so try rounding it.
+  if (!pixels) {
+    pixels = pointToValue[Math.round(pointValue)];
+  }
   if (pixels) {
-    return pixels['px'];
+    return pixels.px;
   } else {
     return 1.333333 * pointValue;
   }
@@ -113,7 +117,8 @@ function pixelValueForFontPoints(pointValue: number): number {
 export function cssFontStylesForFont(font: NSFont): any {
   const { fontFamily, fontSize, fontWeight, fontStyle } = textAndFont;
 
-  const fontPixels = pixelValueForFontPoints(font.pointSize());
+  // Sketch seems to be providing the actual pixel value. Might be a setting in Sketch, otherwise should use pixelValueForFontPoints
+  const fontPixels = font.pointSize();
 
   // fontName ex. Helvetica-Bold, Helvetica-BoldOblique, Helvetical-LightOblique
   // Sketch font weights are Oblique, Light, Light Oblique, Bold, Bold Oblique
