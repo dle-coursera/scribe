@@ -49,6 +49,7 @@ function processBackgroundLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
   cssModel = new CSSModel([name]);
   cssModel.size = size;
   cssModel.position = positionValues.absolute;
+  cssModel.zIndex = -1;
   const component = new ComponentModel(cssModel);
   component.htmlModel = new HTMLModel(tags.div, [name]);
   parentComponent.addChild(component);
@@ -160,12 +161,17 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
         margin = {
           left: layerFrame.origin.x - (lastLayerFrame.origin.x + lastLayerFrame.size.width),
         }
+      } else if (lastLayer.name().startsWith(SCType.SCBackground)) {
+        margin = {
+          top: layerFrame.origin.y - lastLayerFrame.origin.y,
+        }
       } else {
         margin = {
           top: layerFrame.origin.y - (lastLayerFrame.origin.y + lastLayerFrame.size.height),
         }
       }
     } else {
+      
       margin = {
         top: layer.rect().origin.y,
         left: layer.rect().origin.x,
