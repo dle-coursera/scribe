@@ -91,7 +91,7 @@ const pointToValue = {
 }
 
 const fontWeights = {
-  regular: 'regular',
+  normal: 'normal',
   bold: 'bold',
 };
 
@@ -123,7 +123,7 @@ export function cssFontStylesForFont(font: NSFont): any {
   // fontName ex. Helvetica-Bold, Helvetica-BoldOblique, Helvetical-LightOblique
   // Sketch font weights are Oblique, Light, Light Oblique, Bold, Bold Oblique
   const fontNameComponents = font.fontName().toLowerCase().split('-');
-  let fontWeightValue = fontNameComponents.includes(fontWeights.bold) ? fontWeights.bold : fontWeights.regular;
+  let fontWeightValue = fontNameComponents.includes(fontWeights.bold) ? fontWeights.bold : fontWeights.normal;
 
   // Sketch does not have a way to set italics so we ignore it here
   let fontStyleValue: string;
