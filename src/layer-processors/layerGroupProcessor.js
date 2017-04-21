@@ -123,11 +123,11 @@ function processListLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
 function processNormalLayerGroup(layerGroup: MSLayerGroup, isRootLayer: boolean): ComponentModel {
   const layers: Array<any> = layerGroup.layers();
   const name: string = sanitizeGroupName(layerGroup.name());
-  const frame: CGRect = layerGroup.rect();
+  const parentFrame: CGRect = layerGroup.rect();
 
   const size: Size = {
-    width: frame.size.width,
-    height: frame.size.height,
+    width: parentFrame.size.width,
+    height: parentFrame.size.height,
   }
 
   let isHorizontal = isHorizontalLayout(layers);
@@ -137,7 +137,7 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup, isRootLayer: boolean)
 
   let parentComponent = new ComponentModel(cssModel);
   parentComponent.name = name;
-  parentComponent.frame = frame;
+  parentComponent.frame = parentFrame;
   parentComponent.isHorizontalLayout = isHorizontal;
 
   const sortedLayers = sortLayers(layers);
@@ -242,12 +242,11 @@ function sortLayers(layers: Array<any>): Array<any> {
     const frameA = layerA.rect();
     const frameB = layerB.rect();
 
-    // Use the centroid of the layers to correct for layer overlapping.
-    const centerAx = frameA.origin.x + frameA.size.width/2;
-    const centerAy = frameA.origin.y + frameA.size.height/2;
+    const centerAx = frameA.origin.x;
+    const centerAy = frameA.origin.y;
 
-    const centerBx = frameB.origin.x + frameB.size.width/2;
-    const centerBy = frameB.origin.y + frameB.size.height/2;
+    const centerBx = frameB.origin.x + frameB.size.width * 0.2;
+    const centerBy = frameB.origin.y + frameB.size.height * 0.2;
 
     const xDiff = centerAx - centerBx;
     const yDiff = centerBy - centerBy;
@@ -260,6 +259,10 @@ function sortLayers(layers: Array<any>): Array<any> {
       return 0; // Order is not deterministic
     }
   });
+}
+
+function frameToString(frame: CGRect): string {
+  return `x:${frame.origin.x} y:${frame.origin.y} w:${frame.size.width} h:${frame.size.height}`;
 }
 
 function isHorizontalLayout(layers: Array<any>): boolean {
