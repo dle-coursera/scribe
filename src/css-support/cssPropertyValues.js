@@ -8,6 +8,21 @@ export const displayValues = {
   flex: 'flex',
 }
 
+export const justifyContentValues = {
+  flexStart: 'flex-start',
+  flexEnd: 'flex-end',
+  center: 'center',
+  spaceBetween: 'space-between',
+  spaceAround: 'space-around',
+}
+
+export const alignItemsValues = {
+  flexStart: 'flex-start',
+  flexEnd: 'flex-end',
+  center: 'center',
+  stretch: 'stretch',
+}
+
 export const borderStyleValues = {
   none: 'none',
   hidden: 'hidden',

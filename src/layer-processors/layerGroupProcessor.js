@@ -4,7 +4,7 @@ import HTMLModel from '../models/HTMLModel';
 import ComponentModel from '../models/ComponentModel';
 import { processShapeLayer } from './shapeLayerProcessor';
 import { processTextLayer, processBitmapLayer } from './primitiveObjectProcessor';
-import { displayValues } from '../css-support/cssPropertyValues';
+import { displayValues, justifyContentValues, alignItemsValues } from '../css-support/cssPropertyValues';
 import { tags } from '../html-support/tags';
 import { saveSvgToFile, globalIncludesMap, fileFormats } from '../fileSupport';
 
@@ -34,11 +34,11 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
 function processListLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
   const layers: Array<any> = layerGroup.layers();
   const name: string = sanitizeGroupName(layerGroup.name());
-  const frame: CGRect = layerGroup.rect();
+  const parentFrame: CGRect = layerGroup.rect();
 
   const size: Size = {
-    width: frame.size.width,
-    height: frame.size.height,
+    width: parentFrame.size.width,
+    height: parentFrame.size.height,
   }
 
   let cssModel = new CSSModel([name]);
@@ -46,7 +46,7 @@ function processListLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
 
   let parentComponent = new ComponentModel(cssModel);
   parentComponent.name = name;
-  parentComponent.frame = frame;
+  parentComponent.frame = parentFrame;
 
   // The content of the list will be filled in when generate is called. Undefined for now.
   parentComponent.htmlModel = new HTMLModel(tags.ul, [name]);
@@ -64,7 +64,14 @@ function processListLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
     const childName = layer.name();
     // We only want to process SCRow groups for now
     if (layer.isKindOfClass(MSLayerGroup) && childName.startsWith(SCType.SCRow)) {
+      const childFrame = layer.rect();
       const component: Component = processNormalLayerGroup(layer);
+      // Component inside a row should not have a size
+      component.cssModel.size = {};
+      component.cssModel.margin = {
+        left: childFrame.origin.x,
+      };
+
       parentComponent.addChild(component);
     }
     // TODO: Recursively call processListLayerGroup if a child list is detected
@@ -86,14 +93,16 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
     height: frame.size.height,
   }
 
+  let isHorizontal = isHorizontalLayout(layers);
+
   let cssModel = new CSSModel([name]);
   cssModel.size = size;
 
   let parentComponent = new ComponentModel(cssModel);
   parentComponent.name = name;
   parentComponent.frame = frame;
+  parentComponent.isHorizontalLayout = isHorizontal;
 
-  let isHorizontal = isHorizontalLayout(layers);
   const sortedLayers = sortLayers(layers);
   const layerEnumerator = sortedLayers.objectEnumerator();
 

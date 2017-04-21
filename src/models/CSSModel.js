@@ -1,5 +1,5 @@
 // @flow
-import { boxModel, visualFormatting, colorsAndBackground } from '../css-support/cssProperties';
+import { boxModel, visualFormatting, colorsAndBackground, flexbox } from '../css-support/cssProperties';
 import { hexColorForNSColor, alphaForNSColor } from '../layer-support/color';
 import { Padding, Size, Margin } from '../types';
 import { px } from '../css-support/units';
@@ -33,6 +33,18 @@ export default class CSSModel {
       ${propertyString}
     }
     `;
+  }
+
+  // value can be obtained from cssPropertyValues.justifyContentValues
+  set justifyContent(value: string) {
+    const { justifyContent } = flexbox;
+    this.properties[justifyContent] = value
+  }
+
+  // value can be obtained from cssPropertyValues.alignItemsValues
+  set alignItems(value: string) {
+    const { alignItems } = flexbox;
+    this.properties[alignItems] = value;
   }
 
   // value can be obtained from cssPropertyValues.displayValues

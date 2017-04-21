@@ -20,6 +20,12 @@ export const visualFormatting = {
   visibility: 'visibility',
 }
 
+export const flexbox = {
+  display: 'display',
+  alignItems: 'align-items',
+  justifyContent: 'justify-content',
+}
+
 export const boxModel = {
   margin: 'margin',
   marginTop: 'margin-top',

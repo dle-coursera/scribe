@@ -7,13 +7,22 @@ import { globalIncludesMap } from '../fileSupport';
 import { saveImageToFile, saveTextToFile } from '../fileSupport';
 import { px } from '../css-support/units';
 import { colorTheme } from '../layer-support/color';
-import { borderStyleValues } from '../css-support/cssPropertyValues';
+import { borderStyleValues, displayValues, alignItemsValues } from '../css-support/cssPropertyValues';
 
 export default class ComponentModel {
    constructor(cssModel: CSSModel) {
      this._cssModel = cssModel;
      this._children = [];
      this._assets = [];
+     this._isHorizontalLayout = false;
+   }
+
+   set isHorizontalLayout(value: boolean) {
+     this._isHorizontalLayout = value;
+   }
+
+   get isHorizontalLayout() {
+     return this._isHorizontalLayout;
    }
 
    set frame(value: CGRect) {
@@ -129,6 +138,8 @@ export default class ComponentModel {
        listItemCssModel.borderColor = colorTheme.black;
        listItemCssModel.borderWidth = px(1);
        listItemCssModel.borderStyle = borderStyleValues.solid;
+       listItemCssModel.display = displayValues.flex;
+       listItemCssModel.alignItems = alignItemsValues.center;
        listItemCssModel.size = {
          height: this._frame.size.height / this._children.length,
        }
