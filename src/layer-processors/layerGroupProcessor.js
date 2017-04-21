@@ -14,7 +14,7 @@ import {
   SCType,
 } from '../types';
 
-export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
+export function processLayerGroup(layerGroup: MSLayerGroup, isRootLayer: boolean): ComponentModel  {
   const layers: Array<any> = layerGroup.layers();
   const name: string = layerGroup.name();
   const frame: CGRect = layerGroup.rect();
@@ -26,7 +26,7 @@ export function processLayerGroup(layerGroup: MSLayerGroup): ComponentModel  {
   } else if (name.startsWith(SCType.SCList)) {
     return processListLayerGroup(layerGroup);
   } else {
-    return processNormalLayerGroup(layerGroup);
+    return processNormalLayerGroup(layerGroup, isRootLayer);
   }
 }
 
@@ -120,7 +120,7 @@ function processListLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
 /*
   This is used to process a layer group.
 */
-function processNormalLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
+function processNormalLayerGroup(layerGroup: MSLayerGroup, isRootLayer: boolean): ComponentModel {
   const layers: Array<any> = layerGroup.layers();
   const name: string = sanitizeGroupName(layerGroup.name());
   const frame: CGRect = layerGroup.rect();
@@ -153,6 +153,7 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
 
     // Margin computation needs to be here, because recursivly calling this function somehow sets to currently layer to null
     let margin: Margin;
+
     if (lastLayer) {
       const layerFrame = layer.rect();
       const lastLayerFrame = lastLayer.rect();
@@ -171,12 +172,17 @@ function processNormalLayerGroup(layerGroup: MSLayerGroup): ComponentModel {
         }
       }
     } else {
-      
       margin = {
         top: layer.rect().origin.y,
         left: layer.rect().origin.x,
       }
     }
+
+    // When enumerating over the direct child layers of the root layer,
+    // also add the left margin, since they won't necessarily be part of a linear layout
+    if (isRootLayer) {
+      margin.left = layer.rect().origin.x;
+    };
 
     lastLayer = layer;
 

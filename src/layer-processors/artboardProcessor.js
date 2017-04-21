@@ -24,12 +24,14 @@ export function processArtboards(artboards: Array<MSArtboardGroup>) {
 */
 function processArtboardLayers(layers: Array<any>) {
   const layerEnumerator = layers.objectEnumerator();
+  let isRootLayer = true;
   while (layer = layerEnumerator.nextObject()) {
     if (layer.isKindOfClass(MSShapeGroup)) { // this can be a path, oval or rectangle, etc
       // TODO: This can be a path, oval, rectangle, etc
       console.log("Shapes are not yet supported");
     } else if (layer.isKindOfClass(MSLayerGroup)) {
-      let component = processLayerGroup(layer);
+      let component = processLayerGroup(layer, isRootLayer);
+      isRootLayer = false;
       component.generate();
     } else if (layer.isKindOfClass(MSTextLayer)) {
       processTextLayer(layer);
