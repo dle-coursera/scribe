@@ -2,10 +2,9 @@
 A tool to generate code from Sketch designs
 
 ## Installation
-1. `npm install -g skpm`
-2. `npm install`
-3.  In the project directory, copy `config.js.template` to `config.js` and set the `projectRoot`.
-4. `npm run watch`
+1. `npm install`
+2.  In the project directory, copy `config.js.template` to `config.js` and set the `projectRoot`.
+3. `npm run watch`
 
 For more, read [Using skpm](https://www.npmjs.com/package/skpm)
 
